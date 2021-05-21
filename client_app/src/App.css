@@ -1,0 +1,261 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.sk-cube-grid .sk-cube1 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube2 {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube3 {
+  -webkit-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+
+.sk-cube-grid .sk-cube4 {
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube5 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube6 {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube7 {
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+
+.sk-cube-grid .sk-cube8 {
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube9 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+@-webkit-keyframes sk-cubeGridScaleDelay {
+  0%, 70%, 100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}
+
+@keyframes sk-cubeGridScaleDelay {
+  0%, 70%, 100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.header-bottom {
+  background: #0e8170;
+  margin-bottom: 20px;
+}
+
+.hb-menu nav>ul>li>a {
+  color: #fff;
+}
+
+.hb-menu nav>ul>li>a:hover {
+  color: #17eece;
+}
+
+button.li-btn {
+  background: #0e8170;
+}
+
+.sidebar-link:hover {
+  color: #00483d!important;
+  font-weight: bolder;
+}
+
+.hb-menu nav .dropdown>a::after {
+  color: #fff;
+}
+
+.hm-minicart:hover .minicart {
+  display: block!important;
+}
+
+.hm-minicart-trigger .item-text::after {
+  content: "";
+  font-size: 14px;
+  color: #a4a4a4;
+  margin-left: 5px;
+  font-family: fontawesome;
+}
+
+.cart-item-count {
+  color: white;
+}
+
+.fa-search {
+  color: #fff;
+}
+
+.hm-minicart-trigger {
+  background: #315050;
+}
+
+.header-sticky.sticky {
+  background: #0e8170;
+}
+
+.add-actions-link li a:hover {
+  color: white;
+}
+
+/* .add-actions-link li.add-cart.active a{
+  color: #242424;
+} */
+
+.add-actions-link li.add-cart>a:hover {
+  color: white;
+}
+
+button {
+  cursor: pointer;
+  outline: 0;
+  color: #fff;
+}
+
+.nice-select .option {
+  color: black!important;
+}
+
+.nice-select .option:hover {
+  color: #fff!important;
+}
+
+.add-actions-link li:hover {
+  color: #fff;
+}
+
+.cart-quantity .add-to-cart {
+  color: #ffffff;
+}
+
+.image-cart-mini {
+  margin: auto 0px;
+}
+
+.count {
+  max-width: 50px;
+  width: auto;
+  padding: 0
+}
+
+.change-count {
+  border: none;
+  color: #fff;
+  background: #0e8170;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out
+}
+
+.change-count:hover {
+  background: black
+}
+
+.modal_success {
+  position: fixed;
+  left: 40%;
+  z-index: 9999;
+  background-color: rgb(76, 76, 76, .8);
+  width: 25rem;
+  top: 36%
+}
+
+.product_name {
+  color: #0e8170!important;
+  font-weight: bolder;
+}
+
+.minicart-product-details .product_name {
+  max-width: 150px!important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 15px!important;
+}
+
+.ht-menu:hover .ht-setting {
+  display: block!important;
+}
+
+.mr_signin {
+  margin: 50px auto 0px;
+}
+
+.ht-setting-list>li p {
+  cursor: pointer;
+  padding: 0 10px;
+  display: block;
+  font-size: 12px;
+  line-height: 22px;
+  outline: medium none;
+  color: #a5a5a5;
+  margin-bottom: 10px;
+}
+
+.ht-setting-list>li p:hover {
+  color: #fff
+}
