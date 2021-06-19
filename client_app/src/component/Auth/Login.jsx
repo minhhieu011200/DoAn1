@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from '../context/AuthContext'
 import userAPI from '../API/user';
 
+
 function Login(props) {
     const { addLocal, jwt, user } = useContext(AuthContext);
     const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ function Login(props) {
             msg.email = "Email không được để trống"
         }
         if (isEmpty(password)) {
-            msg.password = "Email không được để trống"
+            msg.password = "Password không được để trống"
         }
         setValidationMsg(msg)
         if (Object.keys(msg).length > 0) return false;
@@ -81,11 +82,11 @@ function Login(props) {
                                         </div>
                                         <div className="col-md-8">
                                             <div className="check-box d-inline-block ml-0 ml-md-2 mt-10">
-                                                <Link to="/signup">Do You Account?</Link>
+                                                <Link to="/register">Do You Account?</Link>
                                             </div>
                                         </div>
                                         <div className="col-md-4 mt-10 mb-20 text-left text-md-right">
-                                            <a href="#"> Forgotten pasward?</a>
+                                            <Link to="/forget">Forget Password</Link>
                                         </div>
                                         <div className="col-md-12">
                                             <button className="register-button mt-0" style={{ cursor: 'pointer' }}>Login</button>

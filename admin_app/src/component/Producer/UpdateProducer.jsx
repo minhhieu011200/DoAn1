@@ -13,7 +13,6 @@ function UpdateProducer(props) {
     useEffect(() => {
         const fetchAllData = async () => {
             const ct = await producerAPI.details(id)
-            console.log(ct)
             setName(ct.producer);
         }
 
@@ -22,7 +21,7 @@ function UpdateProducer(props) {
 
     const validateAll = () => {
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         }
 
@@ -88,7 +87,7 @@ function UpdateProducer(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-</footer>
+            </footer>
         </div>
     );
 }

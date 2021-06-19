@@ -60,7 +60,6 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.delete = async (req, res) => {
-    console.log(req.query)
     const id = req.query.id;
 
     await Permission.deleteOne({ _id: id }, (err) => {

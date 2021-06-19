@@ -11,7 +11,7 @@ function CreateProducer(props) {
 
     const validateAll = () => {
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         }
 

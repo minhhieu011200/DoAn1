@@ -5,6 +5,10 @@ const orderAPI = {
         const url = `/admin/order${query}`
         return axiosClient.get(url)
     },
+    statistic: (query) => {
+        const url = `/admin/order/statistic${query}`
+        return axiosClient.get(url)
+    },
     details: (id) => {
         const url = `/admin/order/detail/${id}`
         return axiosClient.get(url)
@@ -27,6 +31,10 @@ const orderAPI = {
     },
     cancelOrder: (query) => {
         const url = `/admin/order/cancelorder${query}`
+        return axiosClient.patch(url)
+    },
+    refund: (query) => {
+        const url = `/admin/order/refund${query}`
         return axiosClient.patch(url)
     }
 }

@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
-import producerAPI from '../Api/producerAPI';
 import isEmpty from 'validator/lib/isEmpty'
+
+import producerAPI from '../Api/producerAPI';
 import productAPI from '../Api/productAPI';
+import saleAPI from '../Api/saleAPI';
 
 function UpdateProduct(props) {
     const [id] = useState(props.match.params.id)
     const [producer, setProducer] = useState([])
+    const [sale, setSale] = useState([])
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [number, setNumber] = useState('');
     const [producerChoose, setProducerChoose] = useState('');
+    const [saleChoose, setSaleChoose] = useState('');
     const [file, setFile] = useState();
     const [image, setImage] = useState();
     const [fileName, setFileName] = useState("");
@@ -23,13 +27,15 @@ function UpdateProduct(props) {
         const fetchAllData = async () => {
             const ct = await producerAPI.getAPI()
             const rs = await productAPI.details(id)
-            console.log(rs)
+            const res = await saleAPI.getAll()
+            setSale(res)
             setName(rs.name_product)
             setPrice(rs.price_product)
             setDescription(rs.describe)
             setNumber(rs.number)
-            setProducerChoose(rs.id_producer)
+            rs.id_producer && setProducerChoose(rs.id_producer._id)
             setImage(rs.image)
+            rs.id_sale && setSaleChoose(rs.id_sale._id)
             setProducer(ct)
         }
         fetchAllData()
@@ -41,7 +47,6 @@ function UpdateProduct(props) {
     };
 
     const onChangeNumber = (e) => {
-
         const value = e.target.value
         if (!Number.isNaN(value) && Number(value) >= 0) {
             setNumber(value)
@@ -58,13 +63,13 @@ function UpdateProduct(props) {
 
     const validateAll = () => {
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         }
-        if (isEmpty(price)) {
+        if (isEmpty(price.toString().trim())) {
             msg.price = "Giá không được để trống"
         }
-        if (isEmpty(description)) {
+        if (isEmpty(description.trim())) {
             msg.description = "Mô tả không được để trống"
         }
         if (isEmpty(number.toString())) {
@@ -98,6 +103,7 @@ function UpdateProduct(props) {
         formData.append("producer", producerChoose)
         formData.append("number", number)
         formData.append("description", description)
+        formData.append("id_sale", saleChoose)
 
         const response = await productAPI.update(formData)
 
@@ -119,7 +125,7 @@ function UpdateProduct(props) {
                             <div className="card-body">
                                 <h4 className="card-title">Update Product</h4>
                                 {
-                                    validationMsg.api === "Bạn đã thêm thành công" ?
+                                    validationMsg.api === "Bạn đã update thành công" ?
                                         (
                                             <div className="alert alert-success alert-dismissible fade show" role="alert">
                                                 {validationMsg.api}
@@ -152,7 +158,7 @@ function UpdateProduct(props) {
                                     </div>
                                     <div className="form-group w-50">
                                         <label htmlFor="number">Số lượng: </label>
-                                        <input type="text" className="form-control" id="number" name="number" value={number} onChange={(e) => onChangeNumber(e)} required />
+                                        <input type="text" className="form-control" id="number" name="number" value={number} onChange={(e) => onChangeNumber(e)} />
                                         <p className="form-text text-danger">{validationMsg.number}</p>
                                     </div>
 
@@ -160,7 +166,6 @@ function UpdateProduct(props) {
                                         {/* <label htmlFor="categories" className="mr-2">Chọn loại:</label> */}
                                         <label htmlFor="categories" className="mr-2">Chọn nhà sản xuất:</label>
                                         <select name="categories" id="categories" value={producerChoose} onChange={(e) => setProducerChoose(e.target.value)}>
-                                            <option >Chọn loại</option>
                                             {
                                                 producer && producer.map((item, index) => (
                                                     <option value={item._id} key={index} >{item.producer}</option>
@@ -172,13 +177,25 @@ function UpdateProduct(props) {
                                     </div>
 
                                     <div className="form-group w-50">
+                                        <label htmlFor="sale" className="mr-2">Chọn khuyến mãi:</label>
+                                        <select name="sale" id="sale" value={saleChoose} onChange={(e) => setSaleChoose(e.target.value)}>
+                                            <option value="">Không chọn khuyến mãi</option>
+                                            {
+                                                sale && sale.map((item, index) => (
+                                                    <option value={item._id} key={index} >{item.describe}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group w-50">
                                         <label>Hình Ảnh</label>
                                         <input type="file" className="form-control-file" name="file" onChange={saveFile} />
                                     </div>
 
                                     <div className="form-group w-50">
                                         <label>Hình Ảnh Cũ</label>
-                                        <img src={image} alt="" style={{ width: '70px' }} />
+                                        <img src={process.env.REACT_APP_API + image} alt="" style={{ width: '70px' }} />
                                     </div>
 
 

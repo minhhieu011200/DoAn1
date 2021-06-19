@@ -53,7 +53,6 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.delete = async (req, res) => {
-    console.log(req.query)
     const id = req.query.id;
 
     await Producer.deleteOne({ _id: id }, (err) => {
@@ -72,24 +71,29 @@ module.exports.detailProduct = async (req, res) => {
     const keyWordSearch = req.query.search;
 
     const perPage = parseInt(req.query.limit) || 8;
-
+    const sort = req.query.sort || ""
 
     let start = (page - 1) * perPage;
     let end = page * perPage;
+    let products = []
+    if (sort === "") {
+        products = await Product.find().populate(['id_producer', 'id_sale'])
+    } else {
+        products = await Product.find().populate(['id_producer', 'id_sale']).sort({ 'price_product': sort });
+    }
 
-    let products = await Product.find().populate('id_producer');
-
-    if (req.params.id !== 'undefined') {
-
+    if (req.params.id === 'sale' && !keyWordSearch) {
+        products = products.filter((c) => {
+            return c.id_sale
+        });
+    } else if (req.params.id !== 'undefined' && !keyWordSearch) {
         products = products.filter((c) => {
             return c.id_producer.producer.toUpperCase() === req.params.id.toUpperCase()
         });
     }
 
-
-    const totalPage = Math.ceil(products.length / perPage);
-
     if (!keyWordSearch) {
+        const totalPage = Math.ceil(products.length / perPage);
         res.json({
             products: products.slice(start, end),
             totalPage: totalPage
@@ -98,11 +102,11 @@ module.exports.detailProduct = async (req, res) => {
     } else {
         var newData = products.filter(value => {
             return value.name_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
-                value.price_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
-                value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
-            // value.id_category.category.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
+                value.price_product.toString().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+                value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+                (value.id_producer && value.id_producer.producer.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1)
         })
-
+        const totalPage = Math.ceil(newData.length / perPage);
         res.json({
             products: newData.slice(start, end),
             totalPage: totalPage

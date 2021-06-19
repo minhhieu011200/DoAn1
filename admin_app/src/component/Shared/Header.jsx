@@ -9,8 +9,8 @@ function Header(props) {
     return (
         <div>
             {
-                jwt && user ?
-                    (<header className="topbar" data-navbarbg="skin6">
+                jwt && user && (
+                    <header className="topbar" data-navbarbg="skin6">
                         <nav className="navbar top-navbar navbar-expand-md">
                             <div className="navbar-header" data-logobg="skin6">
                                 <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="#"><i
@@ -65,10 +65,10 @@ function Header(props) {
                                 </ul>
                             </div>
                         </nav>
-                    </header>) :
-                    (
-                        <div></div>
-                    )}
+                    </header>)
+
+
+            }
         </div>
 
     );

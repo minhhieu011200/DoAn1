@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import queryString from 'query-string'
 
 import productAPI from '../Api/productAPI';
@@ -81,9 +81,11 @@ function Product() {
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
-                                                <th>Image</th>
+                                                <th>Number</th>
+                                                <th>Sale</th>
                                                 <th>Producer</th>
                                                 <th>Edit</th>
                                             </tr>
@@ -94,9 +96,11 @@ function Product() {
                                                 products && products.map((value, index) => (
                                                     <tr key={index}>
                                                         <td className="name">{value._id}</td>
+                                                        <td><img src={process.env.REACT_APP_API + value.image} alt="" style={{ width: '70px' }} /></td>
                                                         <td className="name">{value.name_product}</td>
                                                         <td>{value.price_product}</td>
-                                                        <td><img src={"http://localhost:8000/" + value.image} alt="" style={{ width: '70px' }} /></td>
+                                                        <td>{value.number}</td>
+                                                        <td>{value.id_sale ? value.id_sale.describe : ""}</td>
                                                         <td>{value.id_producer ? value.id_producer.producer : ""}</td>
                                                         <td>
                                                             <div className="d-flex">

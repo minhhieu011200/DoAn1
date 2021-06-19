@@ -26,23 +26,22 @@ function CreateUserCus(props) {
     }, [])
 
     const validateAll = () => {
-        const phongeRegex = /^0(?=.+[0-9]).{9}$/
         const nameRegex = /^\b[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]+.{1}$/
         const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         } else if (nameRegex.test(name.trim()) === false) {
             msg.name = "Tên sai định dạng (Ít nhất 3 kí tự alphabet)"
         }
 
-        if (isEmpty(email)) {
+        if (isEmpty(email.trim())) {
             msg.email = "Email không được để trống"
         } else if (!isEmail(email)) {
             msg.email = "Email sai định dạng"
         }
 
-        if (isEmpty(password)) {
+        if (isEmpty(password.trim())) {
             msg.password = "Mật khẩu không được để trống"
         }
         if (isEmpty(username.trim())) {
@@ -75,13 +74,13 @@ function CreateUserCus(props) {
         const response = await userApi.create(query)
 
         if (response.msg === "Bạn đã thêm thành công") {
-            window.scrollTo(0, 0)
             setName('');
             setUserName('');
             setEmail('');
             setPassword('');
 
         }
+        window.scrollTo(0, 0)
         setValidationMsg({ api: response.msg })
 
     }
@@ -146,7 +145,7 @@ function CreateUserCus(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-    </footer>
+            </footer>
         </div>
     );
 }

@@ -15,9 +15,9 @@ function Pagination({ filter, onPageChange, totalPage }) {
         }
     }
     return (
-        <div className="paginatoin-area mt-90">
+        <div className="paginaton-area mt-95 my-5">
             <div className="row">
-                <div className="col-lg-12 col-md-6">
+                <div className="col">
                     <ul className="pagination-box pt-xs-20 pb-xs-15 text-center">
                         <li>
                             <button onClick={() => handlePageChange(parseInt(page) - 1)}
@@ -26,6 +26,7 @@ function Pagination({ filter, onPageChange, totalPage }) {
                         {
                             indexPage && indexPage.map(value => (
                                 <li className={value === parseInt(page) ? 'page-item active' : 'page-item'}
+                                    style={{ cursor: 'pointer' }}
                                     key={value}
                                     onClick={() => handlePageChange(parseInt(value))}>
 

@@ -58,7 +58,7 @@ function CancelOrder(props) {
                         <div className="card">
                             <div className="card-body">
                                 <h4 className="card-title">Cancel Order</h4>
-                                <h4 className="card-title">TotalMoney: {totalMoney}$</h4>
+                                <h4 className="card-title">TotalMoney: {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(totalMoney) + ' VNĐ'}</h4>
                                 <Search handlerSearch={handlerSearch} />
 
                                 <div className="table-responsive mt-3">
@@ -66,13 +66,14 @@ function CancelOrder(props) {
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>CreateDate</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Address</th>
                                                 <th>Status</th>
                                                 <th>Total Money</th>
-                                                <th>Payment</th>
+                                                <th>Refund</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -82,9 +83,21 @@ function CancelOrder(props) {
                                                 order && order.map((value, index) => (
                                                     <tr key={index}>
                                                         <td className="name">{value._id}</td>
-                                                        <td className="name">{value.id_note.fullname}</td>
-                                                        <td className="name">{value.id_user.email}</td>
-                                                        <td className="name">{value.id_note.phone}</td>
+                                                        <td className="li-product-price">
+                                                            <span className="amount">
+                                                                {new Intl.DateTimeFormat("it-IT", {
+                                                                    year: "numeric",
+                                                                    month: "numeric",
+                                                                    day: "numeric",
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                    second: "numeric"
+                                                                }).format(new Date(value.createDate))}
+                                                            </span>
+                                                        </td>
+                                                        <td className="name">{value.id_note ? value.id_note.fullname : ""}</td>
+                                                        <td className="name">{value.id_user ? value.id_user.email : ""}</td>
+                                                        <td className="name">{value.id_note ? value.id_note.phone : ""}</td>
                                                         <td className="name">{value.address}</td>
                                                         <td>
                                                             {(() => {
@@ -97,8 +110,14 @@ function CancelOrder(props) {
                                                                 }
                                                             })()}
                                                         </td>
-                                                        <td className="name">{value.total}</td>
-                                                        <td className="name">{value.pay === true ? "Đã thanh toán" : "Chưa thanh toán"}</td>
+                                                        <td className="name">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.total) + ' VNĐ'}</td>
+                                                        {
+                                                            order.status === "5" && order.id_momo && !order.id_momo.refund ? (
+                                                                <td className="name" >Chưa hoàn tiền</td>
+                                                            ) : (
+                                                                <td className="name" >Đã hoàn tiền</td>
+                                                            )
+                                                        }
                                                         <td>
                                                             <div className="d-flex">
                                                                 <Link to={"/order/detail/" + value._id} className="btn btn-info mr-1">Detail</Link>
@@ -119,7 +138,7 @@ function CancelOrder(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-        </footer>
+            </footer>
         </div>
     );
 }

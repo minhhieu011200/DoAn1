@@ -80,6 +80,7 @@ function UserCus(props) {
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
+                                                <th>Username</th>
                                                 <th>Permission</th>
                                                 <th>Action</th>
                                             </tr>
@@ -92,6 +93,7 @@ function UserCus(props) {
                                                         <td>{value._id}</td>
                                                         <td>{value.fullname}</td>
                                                         <td>{value.email}</td>
+                                                        <td>{value.username}</td>
                                                         <td>{value.id_permission.permission}</td>
                                                         <td>
                                                             <div className="d-flex">

@@ -34,14 +34,12 @@ function UpdateUser(props) {
     const validateAll = () => {
         const nameRegex = /^\b[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]+.{1}$/
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         } else if (nameRegex.test(name.trim()) === false) {
             msg.name = "Tên sai định dạng (Ít nhất 3 kí tự alphabet)"
         }
-
-
-        if (isEmpty(permissionChoose)) {
+        if (isEmpty(permissionChoose.trim())) {
             msg.permission = "Vui lòng chọn quyền"
         }
         setValidationMsg(msg)
@@ -62,15 +60,15 @@ function UpdateUser(props) {
             id: id,
             name: name,
             password: password,
-            permission: permissionChoose
+            id_permission: permissionChoose
         }
         const query = '?' + queryString.stringify(user)
         const response = await userApi.update(query)
 
         if (response.msg === "Bạn đã update thành công") {
-            window.scrollTo(0, 0)
             setPassword('');
         }
+        window.scrollTo(0, 0)
         setValidationMsg({ api: response.msg })
 
     }
@@ -127,7 +125,7 @@ function UpdateUser(props) {
                                     <div className="form-group w-50">
                                         <label htmlFor="categories" className="mr-2">Chọn quyền:</label>
                                         <select name="categories" id="categories" value={permissionChoose} onChange={(e) => setPermissionChoose(e.target.value)}>
-                                            <option>Chọn quyền</option>
+                                            <option value="">Chọn quyền</option>
                                             {
                                                 permission && permission.map((item, index) => (
                                                     <option value={item._id} key={index} >{item.permission}</option>
@@ -146,7 +144,7 @@ function UpdateUser(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-    </footer>
+            </footer>
         </div>
     );
 }

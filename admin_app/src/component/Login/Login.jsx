@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import isEmpty from 'validator/lib/isEmpty'
+import cookie from 'react-cookies'
 import { useForm } from "react-hook-form";
 
 import userAPI from '../Api/userAPI';
@@ -11,6 +12,7 @@ function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validationMsg, setValidationMsg] = useState('');
+    const [redirect, setRedirect] = useState(true)
     const { handleSubmit } = useForm();
     let history = useHistory();
 
@@ -39,14 +41,18 @@ function Login(props) {
             password: password
         }
         const response = await userAPI.login(user)
-        console.log(response);
 
         if (response.msg === "Đăng nhập thành công") {
             if (response.user.id_permission.permission === "Nhân Viên") {
+                setRedirect(false)
                 addLocal(response.jwt, response.user)
+
                 history.push('/customer')
+
+
             }
             else if (response.user.id_permission.permission === "Admin") {
+                setRedirect(false)
                 addLocal(response.jwt, response.user)
                 history.push('/user')
             } else {
@@ -55,12 +61,6 @@ function Login(props) {
 
         } else
             setValidationMsg({ api: response.msg })
-    }
-
-    if (jwt && user && user.id_permission.permission === "Nhân Viên") {
-        return <Redirect to="/customer" />
-    } else if (jwt && user && user.id_permission.permission === "Admin") {
-        return <Redirect to="/user" />
     }
 
     return (
@@ -97,6 +97,12 @@ function Login(props) {
                                 <div className="col-lg-12 text-center">
                                     <button type="submit" className="btn btn-block btn-dark">Sign In</button>
                                 </div>
+                                {
+                                    redirect && cookie.load('jwt') && cookie.load('user') && cookie.load('user').id_permission.permission === "Nhân Viên" && <Redirect to="/customer" />
+                                }
+                                {
+                                    redirect && cookie.load('jwt') && cookie.load('user') && cookie.load('user').id_permission.permission === "Admin" && <Redirect to="/user" />
+                                }
                             </div>
                         </form>
                     </div>

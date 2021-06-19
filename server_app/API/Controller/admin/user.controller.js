@@ -1,13 +1,13 @@
 const User = require('../../../Models/user')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Order = require('../../../Models/order')
 
 module.exports.index = async (req, res) => {
     let page = parseInt(req.query.page) || 1;
     const keyWordSearch = req.query.search;
 
     const perPage = parseInt(req.query.limit) || 8;
-    const totalPage = Math.ceil(await User.countDocuments() / perPage);
 
     let start = (page - 1) * perPage;
     let end = page * perPage;
@@ -18,17 +18,21 @@ module.exports.index = async (req, res) => {
         users = await User.find({}).populate('id_permission')
     }
 
-
     if (!keyWordSearch) {
+        const totalPage = Math.ceil(users.length / perPage);
         res.json({
             users: users.slice(start, end),
             totalPage: totalPage
         })
 
     } else {
+        const totalPage = Math.ceil(users.length / perPage);
         var newData = users.filter(value => {
             return value.fullname.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
-                value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
+                value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+                value.email.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+                (value.id_permission && value.id_permission.permission.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1) ||
+                (value.id_permission && value.id_permission._id.toString().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1)
         })
 
         res.json({
@@ -55,7 +59,10 @@ module.exports.create = async (req, res) => {
         newUser.fullname = req.query.name
         newUser.username = req.query.username
         newUser.password = req.query.password
-        if (req.query.permission) {
+        if (!req.query.rank) {
+            newUser.id_rank = "60cb0ede375d6898906d2b1e"
+        }
+        if (!req.query.permission) {
             newUser.id_permission = "6087dcb5f269113b3460fce4"
         } else newUser.id_permission = req.query.permission
         newUser.email = req.query.email
@@ -99,14 +106,12 @@ module.exports.update = async (req, res) => {
         req.query.password = await bcrypt.hash(req.query.password, salt);
     }
 
-    req.query.name = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
-    await User.updateOne({ _id: req.query.id }, {
-        fullname: req.query.name,
-        password: req.query.password,
-        id_permission: req.query.permission
-    }, function (err, res) {
-        if (err) return res.json({ msg: err });
-    });
+    req.query.fullname = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
+    await User.updateOne({ _id: req.query.id },
+        req.query
+        , function (err, res) {
+            if (err) return res.json({ msg: err });
+        });
     res.json({ msg: "Bạn đã update thành công" })
 }
 
@@ -117,7 +122,7 @@ module.exports.login = async (req, res) => {
 
     const body = [{ username: email }, { email: email }]
 
-    const user = await User.findOne({ $or: body }).populate('id_permission')
+    const user = await User.findOne({ $or: body }).populate(['id_permission', 'id_rank'])
 
     if (user === null) {
         res.json({ msg: "Không Tìm Thấy User" })
@@ -126,9 +131,64 @@ module.exports.login = async (req, res) => {
         const auth = await bcrypt.compare(password, user.password)
         if (auth) {
             var token = jwt.sign(user._id.toJSON(), 'gfdgfd');
+
             res.json({ msg: "Đăng nhập thành công", user: user, jwt: token })
         } else {
             res.json({ msg: "Sai mật khẩu" })
         }
     }
+}
+
+module.exports.changePassword = async (req, res) => {
+    let user
+    if (req.query.id) {
+        user = await User.findOne({ _id: req.query.id }).populate('id_permission')
+    }
+
+    if (req.query.password) {
+        const auth = await bcrypt.compare(req.query.password, user.password)
+        if (!auth) {
+            return res.json({ msg: "Sai mật khẩu" })
+        }
+    }
+    const salt = await bcrypt.genSalt();
+    req.query.newPassword = await bcrypt.hash(req.query.newPassword, salt);
+
+    await User.updateOne({ $or: [{ _id: req.query.id }, { email: req.query.email }] },
+        { password: req.query.newPassword }
+        , function (err, res) {
+            if (err) return res.json({ msg: err });
+        });
+    res.json({ msg: "Bạn đã update thành công" })
+
+
+
+}
+
+module.exports.sendOTP = async function (req, res, next) {
+    const user = await User.findOne({ email: req.query.email })
+
+    if (!user) {
+        return res.json({ msg: "Email chưa được đăng ký" })
+    }
+
+    next();
+
+}
+
+module.exports.checkLogin = async function (req, res) {
+    const user = req.body.user
+    const jwt2 = req.body.jwt
+
+    const check = await User.findOne({ _id: user._id })
+    if (!check) {
+        return res.json({ msg: "Thất bại" })
+    }
+
+    var token = jwt.sign(check._id.toJSON(), 'gfdgfd');
+
+    if (token !== jwt2) {
+        return res.json({ msg: "Thất bại" })
+    }
+    res.json({ msg: "Thành công" })
 }

@@ -9,7 +9,7 @@ var schema = new mongoose.Schema(
         },
         content: String,
         star: String,
-        createDate: String
+        createDate: { type: Date, default: Date.now }
     }
 );
 

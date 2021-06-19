@@ -14,12 +14,25 @@ var schema = new mongoose.Schema(
             type: String,
             ref: 'Note'
         },
+        id_momo: {
+            type: String,
+            ref: 'MoMo'
+        },
+        id_paypal: {
+            type: String,
+            ref: 'Paypal'
+        },
+        id_coupon: {
+            type: String,
+            ref: 'Coupon'
+        },
         address: String,
         total: Number,
         status: String,
         pay: Boolean,
         feeship: Number,
-        createDate: String,
+        discount: Number,
+        createDate: { type: Date, default: Date.now }
     }
 );
 

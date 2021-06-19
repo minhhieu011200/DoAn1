@@ -12,8 +12,7 @@ var schema = new mongoose.Schema(
         },
         name_product: String,
         price_product: String,
-        count: Number,
-        size: String
+        count: Number
     }
 );
 

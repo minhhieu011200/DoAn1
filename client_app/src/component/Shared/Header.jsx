@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom'
+import Search from './Search'
 import producerAPI from '../API/producer'
 import { CartContext } from '../context/CartContext'
 import { AuthContext } from '../context/AuthContext'
+import Logo from '../../IMG/logo.jpg'
 
 function Header() {
     const { cartItem, sumCount, sumPrice, show_success, deleteCart } = useContext(CartContext);
@@ -16,6 +18,9 @@ function Header() {
 
         fetchAllData()
     }, [])
+
+
+
     return (
         <header>
             {
@@ -66,13 +71,15 @@ function Header() {
                                                     (
                                                         <ul className="ht-setting-list">
                                                             <li><NavLink to="/profile" href >Xem thông tin</NavLink></li>
+                                                            <li><NavLink to="/order" href >Lịch sử đặt hàng</NavLink></li>
                                                             <li><p onClick={() => { logOut() }}>Đăng xuất</p></li>
+
                                                         </ul>
                                                     ) :
                                                     (
                                                         <ul className="ht-setting-list">
                                                             <li><NavLink to="/login">Đăng nhập</NavLink></li>
-                                                            <li><NavLink to="/Register">Đăng kí</NavLink></li>
+                                                            <li><NavLink to="/register">Đăng kí</NavLink></li>
                                                         </ul>
                                                     )
                                             }
@@ -94,30 +101,17 @@ function Header() {
                         {/* Begin Header Logo Area */}
                         <div className="col-lg-3">
                             <div className="logo pb-sm-30 pb-xs-30">
-                                <a href="index.html">
-                                    <img src="images/menu/logo/1.jpg" alt="" />
-                                </a>
+                                <Link to="/">
+                                    <img src={Logo} alt="" width="200px" />
+                                </Link>
                             </div>
                         </div>
-                        {/* Header Logo Area End Here */}
-                        {/* Begin Header Middle Right Area */}
+
                         <div className="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
-                            {/* Begin Header Middle Searchbox Area */}
-                            <form action="#" className="hm-searchbox">
-                                <input type="text" placeholder="Enter your search key ..." />
-                                <button className="li-btn" type="submit"><i className="fa fa-search" /></button>
-                            </form>
-                            {/* Header Middle Searchbox Area End Here */}
-                            {/* Begin Header Middle Right Area */}
+                            <Search />
+
                             <div className="header-middle-right">
                                 <ul className="hm-menu">
-                                    {/* Begin Header Middle Wishlist Area */}
-                                    <li className="hm-wishlist">
-                                        <a href="wishlist.html">
-                                            <span className="cart-item-count wishlist-item-count">0</span>
-                                            <i className="fa fa-heart-o" />
-                                        </a>
-                                    </li>
                                     {/* Header Middle Wishlist Area End Here */}
                                     {/* Begin Header Mini Cart Area */}
 
@@ -135,7 +129,7 @@ function Header() {
                                                     cartItem && cartItem.map((c, index) => (
                                                         <li key={index}>
                                                             <a className="minicart-product-image">
-                                                                <img src={"http://localhost:8000/" + c.image} alt="cart products" />
+                                                                <img src={process.env.REACT_APP_API + c.image} alt="cart products" />
                                                             </a>
                                                             <div className="minicart-product-details">
                                                                 <Link to={"/detail/" + c.id_product}><h6 className="product_name">{c.name_product}</h6></Link>
@@ -149,7 +143,7 @@ function Header() {
                                                     ))
                                                 }
                                             </ul>
-                                            <p className="minicart-total">SUBTOTAL: <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(sumPrice) + 'đ'}</span></p>
+                                            <p className="minicart-total">SUBTOTAL: <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(sumPrice) + ' Đ'}</span></p>
                                             <div className="minicart-button">
                                                 <Link to="/cart" className="li-button li-button-fullwidth">
                                                     <span>View Full Cart</span>
@@ -199,8 +193,7 @@ function Header() {
                                             </ul>
                                         </li>
 
-                                        <li><a href="about-us.html">About Us</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><Link to="/event">Event</Link></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -214,7 +207,36 @@ function Header() {
             <div className="mobile-menu-area d-lg-none d-xl-none col-12">
                 <div className="container">
                     <div className="row">
-                        <div className="mobile-menu">
+                        <div className="mobile-menu mean-container">
+                            <div className="mean-bar">
+                                <a className="meanmenu-reveal collapse" data-toggle="collapse" data-target="#nav" aria-expanded="false" aria-controls="nav" ><span /><span /><span /></a>
+                                <nav id="nav" className="mean-nav collapse">
+                                    <ul>
+                                        <li><Link to="/">Home</Link></li>
+                                        <li className="dropdown-holder"><Link to="/shop">Shop</Link>
+                                            <a className="mean-expand collapse" data-toggle="collapse" data-target="#shop" aria-expanded="false" aria-controls="shop" style={{ fontSize: '18px', cursor: 'pointer' }}>+</a>
+                                            <ul id="shop" className="hb-dropdown collapse">
+                                                {
+                                                    menu && menu.map((item, index) =>
+                                                    (
+                                                        <li className="sub-dropdown-holder" key={index}>
+                                                            <NavLink to={"/shop/" + item.producer.toLowerCase()} className="sidebar-link">
+                                                                {item.producer}
+                                                            </NavLink>
+                                                        </li>
+
+                                                    ))
+                                                }
+
+
+                                            </ul>
+
+                                        </li>
+                                        <li><Link to="/event">Event</Link></li>
+
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>

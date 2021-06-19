@@ -6,8 +6,12 @@ var schema = new mongoose.Schema(
             type: String,
             ref: 'Producer'
         },
+        id_sale: {
+            type: String,
+            ref: 'Sale'
+        },
         name_product: String,
-        price_product: String,
+        price_product: Number,
         image: String,
         describe: String,
         number: Number,

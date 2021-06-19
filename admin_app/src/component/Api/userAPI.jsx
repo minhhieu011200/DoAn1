@@ -29,6 +29,10 @@ const userAPI = {
     delete: (query) => {
         const url = `/admin/user/delete${query}`
         return axiosClient.delete(url)
+    },
+    checkLogin: (data) => {
+        const url = `/admin/user/checkLogin`
+        return axiosClient.post(url, data)
     }
 
 }

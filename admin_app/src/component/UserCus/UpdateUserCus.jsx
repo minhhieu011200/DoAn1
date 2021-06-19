@@ -4,7 +4,6 @@ import queryString from 'query-string'
 import isEmpty from 'validator/lib/isEmpty'
 
 import userApi from '../Api/userAPI'
-import permissionAPI from '../Api/permissionAPI'
 
 function UpdateUserCus(props) {
     const [id] = useState(props.match.params.id)
@@ -12,15 +11,13 @@ function UpdateUserCus(props) {
     const [username, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [permissionChoose, setPermissionChoose] = useState('6087dcb5f269113b3460fce4');
+    const [permissionChoose] = useState('6087dcb5f269113b3460fce4');
     const [validationMsg, setValidationMsg] = useState('');
     const { handleSubmit } = useForm();
 
     useEffect(() => {
         const fetchAllData = async () => {
-            const ps = await permissionAPI.getAPI();
             const rs = await userApi.details(id)
-            console.log(rs)
             setEmail(rs.email)
             setUserName(rs.username)
             setName(rs.fullname)
@@ -31,12 +28,11 @@ function UpdateUserCus(props) {
     const validateAll = () => {
         const nameRegex = /^\b[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]+.{1}$/
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         } else if (nameRegex.test(name.trim()) === false) {
             msg.name = "Tên sai định dạng (Ít nhất 3 kí tự alphabet)"
         }
-
 
         if (isEmpty(permissionChoose)) {
             msg.permission = "Vui lòng chọn quyền"
@@ -65,9 +61,9 @@ function UpdateUserCus(props) {
         const response = await userApi.update(query)
 
         if (response.msg === "Bạn đã update thành công") {
-            window.scrollTo(0, 0)
             setPassword('');
         }
+        window.scrollTo(0, 0)
         setValidationMsg({ api: response.msg })
 
     }
@@ -130,7 +126,7 @@ function UpdateUserCus(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-    </footer>
+            </footer>
         </div>
     );
 }

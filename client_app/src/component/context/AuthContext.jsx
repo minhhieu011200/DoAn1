@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import cookie from 'react-cookies'
+import UserAPI from '../API/user';
 
 
 export const AuthContext = createContext();
@@ -9,20 +10,41 @@ const AuthContextProvider = (props) => {
     const [user, setUser] = useState();
 
     useEffect(() => {
-        if (cookie.load('jwt') && cookie.load('user')) {
-            setJWT(cookie.load('jwt'))
-            setUser(cookie.load('user'))
+        const fetchAllData = async (jwt, user) => {
+            const response = await UserAPI.checkLogin({ jwt: jwt, user: user })
+
+            if (response.msg === "Thành công") {
+                setJWT(cookie.load('jwt'))
+                setUser(cookie.load('user'))
+            }
+            else {
+                window.location.href = "/"
+                cookie.remove('jwt')
+                cookie.remove('user')
+
+            }
+        }
+
+        if (cookie.load('jwt') || cookie.load('user')) {
+            fetchAllData(cookie.load('jwt'), cookie.load('user'))
+        } else {
+            cookie.remove('jwt')
+            cookie.remove('user')
         }
     }, [])
 
     const addLocal = (jwt, user) => {
-        const expires = new Date()
-        expires.setDate(Date.now() + 1000 * 60 * 60 * 24 * 14)
-        cookie.save('jwt', jwt, { expires, maxAge: 1000, })
-        cookie.save('user', JSON.stringify(user), { expires, maxAge: 1000 })
+        cookie.save('jwt', jwt)
+        cookie.save('user', JSON.stringify(user))
 
         setJWT(jwt);
         setUser(user);
+    }
+
+    const changeProfile = (name) => {
+        user.fullname = name;
+        cookie.save('user', JSON.stringify(user))
+        setUser({ ...user, fullname: name });
     }
 
     const logOut = () => {
@@ -40,7 +62,8 @@ const AuthContextProvider = (props) => {
                 jwt,
                 user,
                 addLocal,
-                logOut
+                logOut,
+                changeProfile
             }}>
             {props.children}
         </AuthContext.Provider>

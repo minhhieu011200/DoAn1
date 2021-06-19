@@ -5,6 +5,7 @@ var router = express.Router()
 const Products = require('../Controller/product.controller')
 
 router.get('/', Products.index)
+router.get('/search', Products.search)
 
 router.get('/category', Products.category)
 

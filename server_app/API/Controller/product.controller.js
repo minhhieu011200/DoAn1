@@ -4,8 +4,20 @@ const Category = require('../../Models/producer')
 
 
 module.exports.index = async (req, res) => {
+    let products = await Products.find().populate(['id_producer', 'id_sale']);
 
-    const products = await Products.find()
+    res.json(products)
+}
+
+module.exports.search = async (req, res) => {
+    let keyWordSearch = req.query.search
+    let products = await Products.find().populate(['id_producer', 'id_sale']);
+    products = products.filter(value => {
+        return value.name_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+            value.price_product.toString().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+            value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+            (value.id_producer && value.id_producer.producer.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1)
+    })
 
     res.json(products)
 }
@@ -23,18 +35,17 @@ module.exports.gender = async (req, res) => {
 
 //TH: Hàm này dùng để phân loại sản phẩm
 module.exports.category = async (req, res) => {
+    const id_producer = req.query.producer
+    const count = req.query.count || 7
 
-    const id_category = req.query.id_category
-
-    let products_category
-
-    if (id_category === 'all') {
-        products_category = await Products.find()
+    let products_category = []
+    if (id_producer === "") {
+        products_category = await Products.find({ id_sale: { $ne: null } }).populate('id_sale')
     } else {
-        products_category = await Products.find({ id_producer: id_producer })
+        products_category = await Products.find({ id_producer: id_producer }).populate('id_sale')
     }
 
-    res.json(products_category)
+    res.json(products_category.slice(0, count))
 }
 
 //TH: Chi Tiết Sản Phẩm

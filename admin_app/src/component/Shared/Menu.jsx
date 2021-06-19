@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     NavLink,
     Redirect
@@ -14,7 +14,15 @@ function Menu() {
             permission: "Nhân Viên"
         },
         {
+            item: "Coupon",
+            permission: "Nhân Viên"
+        },
+        {
             item: "Product",
+            permission: "Nhân Viên"
+        },
+        {
+            item: "Sale",
             permission: "Nhân Viên"
         },
         {
@@ -53,69 +61,47 @@ function Menu() {
             item: "Permission",
             permission: "Admin"
         }
-        // "Producer", ,
-        // "Permission",
-        // "User",
-        // "Order",
-        // "ConfirmOrder",
-        // "Delivery",
-        // "ConfirmDelivery",   
-        // "CompletedOrder",
-        // "CancelOrder"
     ])
-    let { pathname } = window.location;
     return (
         <div>
             {
-                jwt && user ?
-                    (
-                        <aside className="left-sidebar" data-sidebarbg="skin6">
-                            <div className="scroll-sidebar" data-sidebarbg="skin6">
-                                <nav className="sidebar-nav">
-                                    <ul id="sidebarnav">
+                jwt && user && (
+                    <aside className="left-sidebar" data-sidebarbg="skin6">
+                        <div className="scroll-sidebar" data-sidebarbg="skin6">
+                            <nav className="sidebar-nav">
+                                <ul id="sidebarnav">
+                                    <li className="sidebar-item"> <a className="sidebar-link has-arrow" href="#"
+                                        aria-expanded="false"><i data-feather="grid" className="feather-icon"></i><span
+                                            className="hide-menu">Tables </span></a>
+                                        <ul aria-expanded="false" className="collapse  first-level base-level-line">
+                                            {
+                                                menu && menu.map((item, index) => (
+                                                    (
+                                                        <li className="sidebar-item active" key={index}>
+                                                            {
 
-                                        <li className="list-divider"></li>
+                                                                item.permission === user.id_permission.permission &&
+                                                                (
+                                                                    <NavLink to={"/" + item.item.toLowerCase()} className="sidebar-link">
+                                                                        {item.item}
+                                                                    </NavLink>
+                                                                )
+                                                            }
+                                                        </li>
+                                                    )
+                                                ))
+                                            }
 
-                                        <li className="nav-small-cap"><span className="hide-menu">Components</span></li>
-
-
-                                        <li className="sidebar-item"> <a className="sidebar-link has-arrow" href="#"
-                                            aria-expanded="false"><i data-feather="grid" className="feather-icon"></i><span
-                                                className="hide-menu">Tables </span></a>
-                                            <ul aria-expanded="false" className="collapse  first-level base-level-line">
-                                                {
-                                                    menu && menu.map((item, index) => (
-                                                        (
-                                                            <li className="sidebar-item active" key={index}>
-                                                                {
-                                                                    item.permission === user.id_permission.permission ?
-                                                                        (
-                                                                            <NavLink to={"/" + item.item.toLowerCase()} className="sidebar-link">
-                                                                                {item.item}
-                                                                            </NavLink>
-                                                                        ) :
-                                                                        (
-                                                                            <div></div>
-                                                                        )
-                                                                }
-
-                                                            </li>
-                                                        )
-                                                    ))
-                                                }
-
-                                            </ul>
-                                        </li>
+                                        </ul>
+                                    </li>
 
 
-                                    </ul>
-                                </nav>
-                            </div>
-                        </aside>
-                    ) :
-                    (
-                        <Redirect to="/" />
-                    )
+                                </ul>
+                            </nav>
+                        </div>
+                    </aside>
+                )
+
             }
         </div>
 

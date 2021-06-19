@@ -4,25 +4,31 @@ Author: HasTech
 Version: 1
 Note: responsive.css, All Responsive CSS Style For This Theme Included In This File.
 ---------------------------------------------------------------*/
+
 /* Large Desktop Device :1501px*/
+
 @media (min-width: 1501px) {
 	/*Li's Default Container*/
 	.container {
-	    max-width: 1170px;
-	    padding-left: 0;
-	    padding-right: 0;
+		max-width: 1170px;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
+
 /*Desktop Device : 1200px*/
+
 @media (min-width: 1200px) and (max-width: 1500px) {
 	/*Li's Default Container*/
 	.container {
-	    max-width: 1170px;
-	    padding-left: 0;
-	    padding-right: 0;
+		max-width: 1170px;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
+
 /* Normal Device :992px. */
+
 @media (min-width: 992px) and (max-width: 1199px) {
 	/*Header Middle*/
 	.header-middle {
@@ -32,11 +38,11 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		min-width: 458px;
 	}
 	/*Category Menu*/
-	.catmenu .catmenu-dropdown .megamenu > li {
+	.catmenu .catmenu-dropdown .megamenu>li {
 		min-width: 238.2px;
 	}
 	/*Footer Static Middle*/
-	.social-link > li > a {
+	.social-link>li>a {
 		width: 35px;
 		height: 35px;
 		line-height: 35px !important;
@@ -48,7 +54,9 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		white-space: nowrap;
 	}
 }
+
 /* Tablet Desktop :768px. */
+
 @media (min-width: 768px) and (max-width: 991px) {
 	/*Home Version One Area*/
 	/*Header Right*/
@@ -78,14 +86,14 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.slider-content {
 		padding-left: 40px;
 	}
-	.slider-content > h5 {
+	.slider-content>h5 {
 		max-width: 250px;
 	}
-	.slider-content > h2 {
+	.slider-content>h2 {
 		font-size: 26px;
 		max-width: 220px;
 	}
-	.slider-content > h3 > span {
+	.slider-content>h3>span {
 		font-size: 24px;
 	}
 	/*Footer Shipping Area*/
@@ -93,8 +101,8 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		margin-left: 0;
 		margin-right: 0;
 	}
-	.footer-static-top-3 .footer-shipping .row > [class*="col"] {
-	  padding: 0px;
+	.footer-static-top-3 .footer-shipping .row>[class*="col"] {
+		padding: 0px;
 	}
 	.shipping-text h2 {
 		text-overflow: ellipsis;
@@ -115,100 +123,97 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		width: 100px;
 	}
 	/*Category MenuHome | Two & Three Style*/
-	.category-menu-list > ul > li.right-menu > a:after {
-	 display: none;
+	.category-menu-list>ul>li.right-menu>a:after {
+		display: none;
 	}
 	.category-menu {
-	 width: 100%;
-	 position: relative;
+		width: 100%;
+		position: relative;
 	}
-	.cat-mega-menu,
-	.cat-dropdown {
-	 position: static;
-	 z-index: 9;
-	 opacity: 1;
-	 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	 visibility: visible;
-	 background-color: transparent;
-	 padding: 0;
-	    box-shadow: none;
-	    border: 0;
-	 width: 100%;
-	 -webkit-transition: none;
-	 transition: none;
+	.cat-mega-menu, .cat-dropdown {
+		position: static;
+		z-index: 9;
+		opacity: 1;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		visibility: visible;
+		background-color: transparent;
+		padding: 0;
+		box-shadow: none;
+		border: 0;
+		width: 100%;
+		-webkit-transition: none;
+		transition: none;
 	}
-	.category-menu-list > ul > li i {
-	 position: absolute;
-	 right: 0;
-	 top: 0;
-	 cursor: pointer;
-	 height: 40px;
-	 width: 40px;
-	 line-height: 40px;
-	 z-index: 9;
+	.category-menu-list>ul>li i {
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: pointer;
+		height: 40px;
+		width: 40px;
+		line-height: 40px;
+		z-index: 9;
 	}
-	.category-menu-list > ul > li i:before {
-	 background-color: #606060;
-	 width: 8px;
-	 height: 2px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-left: -4px;
-	 margin-top: -1px;
-	 top: 50%;
+	.category-menu-list>ul>li i:before {
+		background-color: #606060;
+		width: 8px;
+		height: 2px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -1px;
+		top: 50%;
 	}
-	.category-menu-list > ul > li i:after {
-	 background-color: #606060;
-	 width: 2px;
-	 height: 8px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-top: -4px;
-	 margin-left: -1px;
-	 top: 50%;
-	 -webkit-transition: all 0.3s ease 0s;
-	 transition: all 0.3s ease 0s;
-	 -webkit-transform: scaleY(0);
-	 transform: scaleY(0);
+	.category-menu-list>ul>li i:after {
+		background-color: #606060;
+		width: 2px;
+		height: 8px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-top: -4px;
+		margin-left: -1px;
+		top: 50%;
+		-webkit-transition: all 0.3s ease 0s;
+		transition: all 0.3s ease 0s;
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
 	}
-	.category-menu-list > ul > li i.expand:after {
-	 -webkit-transform: scaleY(1);
-	 transform: scaleY(1);
+	.category-menu-list>ul>li i.expand:after {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
 	}
-	li.right-menu .cat-mega-menu > li {
-	 -webkit-box-flex: 0;
-	     -ms-flex: 0 0 100%;
-	         flex: 0 0 100%;
-	    width: 100%;
-	 padding: 0;
-	 position: relative;
+	li.right-menu .cat-mega-menu>li {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 100%;
+		flex: 0 0 100%;
+		width: 100%;
+		padding: 0;
+		position: relative;
 	}
-	.cat-mega-menu > li.cat-mega-title > a:after{
-	    display: none;        
+	.cat-mega-menu>li.cat-mega-title>a:after {
+		display: none;
 	}
-	.cat-mega-menu > li.cat-mega-title > a,
-	.cat-mega-menu > li > ul > li > a,
-	.cat-dropdown > li > a{
-	 padding: 10px 25px 10px 35px;
-	 line-height: 18px;
-	 font-size: 13px;
-	 color: #7a7a7a;
-	 font-weight: normal;
-	 position: relative;
-	 margin: 0;
-	    border-bottom: 1px solid #e8e8e8;
-	    display: block;
-	 text-transform: inherit;
+	.cat-mega-menu>li.cat-mega-title>a, .cat-mega-menu>li>ul>li>a, .cat-dropdown>li>a {
+		padding: 10px 25px 10px 35px;
+		line-height: 18px;
+		font-size: 13px;
+		color: #7a7a7a;
+		font-weight: normal;
+		position: relative;
+		margin: 0;
+		border-bottom: 1px solid #e8e8e8;
+		display: block;
+		text-transform: inherit;
 	}
-	.cat-mega-menu > li.cat-mega-title:last-child > a,
-	.cat-mega-menu > li > ul > li:last-child > a,
-	.cat-dropdown > li:last-child > a{
-	    border-bottom: 0;        
+	.cat-mega-menu>li.cat-mega-title:last-child>a, .cat-mega-menu>li>ul>li:last-child>a, .cat-dropdown>li:last-child>a {
+		border-bottom: 0;
 	}
 }
+
 /*Large Mobile Device :576px */
+
 @media (min-width: 576px) and (max-width: 767px) {
 	/*Home Version One Area*/
 	/*Header Top*/
@@ -258,10 +263,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		left: -10px;
 		top: -10px;
 	}
-	.ht-menu > li .ht-setting-trigger span::after, 
-	.ht-menu > li .ht-currency-trigger span::after, 
-	.ht-menu > li .ht-language-trigger span::after, 
-	.hm-minicart-trigger .item-text::after {
+	.ht-menu>li .ht-setting-trigger span::after, .ht-menu>li .ht-currency-trigger span::after, .ht-menu>li .ht-language-trigger span::after, .hm-minicart-trigger .item-text::after {
 		font-size: 12px;
 		margin-top: 2px;
 	}
@@ -277,7 +279,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.slider-content {
 		padding-left: 35px;
 	}
-	.slider-content > h2 {
+	.slider-content>h2 {
 		font-size: 28px;
 		max-width: 250px;
 	}
@@ -306,100 +308,97 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		border: none;
 	}
 	/*Category MenuHome | Two & Three Style*/
-	.category-menu-list > ul > li.right-menu > a:after {
-	 display: none;
+	.category-menu-list>ul>li.right-menu>a:after {
+		display: none;
 	}
 	.category-menu {
-	 width: 100%;
-	 position: relative;
+		width: 100%;
+		position: relative;
 	}
-	.cat-mega-menu,
-	.cat-dropdown {
-	 position: static;
-	 z-index: 9;
-	 opacity: 1;
-	 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	 visibility: visible;
-	 background-color: transparent;
-	 padding: 0;
-	    box-shadow: none;
-	    border: 0;
-	 width: 100%;
-	 -webkit-transition: none;
-	 transition: none;
+	.cat-mega-menu, .cat-dropdown {
+		position: static;
+		z-index: 9;
+		opacity: 1;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		visibility: visible;
+		background-color: transparent;
+		padding: 0;
+		box-shadow: none;
+		border: 0;
+		width: 100%;
+		-webkit-transition: none;
+		transition: none;
 	}
-	.category-menu-list > ul > li i {
-	 position: absolute;
-	 right: 0;
-	 top: 0;
-	 cursor: pointer;
-	 height: 40px;
-	 width: 40px;
-	 line-height: 40px;
-	 z-index: 9;
+	.category-menu-list>ul>li i {
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: pointer;
+		height: 40px;
+		width: 40px;
+		line-height: 40px;
+		z-index: 9;
 	}
-	.category-menu-list > ul > li i:before {
-	 background-color: #606060;
-	 width: 8px;
-	 height: 2px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-left: -4px;
-	 margin-top: -1px;
-	 top: 50%;
+	.category-menu-list>ul>li i:before {
+		background-color: #606060;
+		width: 8px;
+		height: 2px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -1px;
+		top: 50%;
 	}
-	.category-menu-list > ul > li i:after {
-	 background-color: #606060;
-	 width: 2px;
-	 height: 8px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-top: -4px;
-	 margin-left: -1px;
-	 top: 50%;
-	 -webkit-transition: all 0.3s ease 0s;
-	 transition: all 0.3s ease 0s;
-	 -webkit-transform: scaleY(0);
-	 transform: scaleY(0);
+	.category-menu-list>ul>li i:after {
+		background-color: #606060;
+		width: 2px;
+		height: 8px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-top: -4px;
+		margin-left: -1px;
+		top: 50%;
+		-webkit-transition: all 0.3s ease 0s;
+		transition: all 0.3s ease 0s;
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
 	}
-	.category-menu-list > ul > li i.expand:after {
-	 -webkit-transform: scaleY(1);
-	 transform: scaleY(1);
+	.category-menu-list>ul>li i.expand:after {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
 	}
-	li.right-menu .cat-mega-menu > li {
-	 -webkit-box-flex: 0;
-	     -ms-flex: 0 0 100%;
-	         flex: 0 0 100%;
-	    width: 100%;
-	 padding: 0;
-	 position: relative;
+	li.right-menu .cat-mega-menu>li {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 100%;
+		flex: 0 0 100%;
+		width: 100%;
+		padding: 0;
+		position: relative;
 	}
-	.cat-mega-menu > li.cat-mega-title > a:after{
-	    display: none;        
+	.cat-mega-menu>li.cat-mega-title>a:after {
+		display: none;
 	}
-	.cat-mega-menu > li.cat-mega-title > a,
-	.cat-mega-menu > li > ul > li > a,
-	.cat-dropdown > li > a{
-	 padding: 10px 25px 10px 35px;
-	 line-height: 18px;
-	 font-size: 13px;
-	 color: #7a7a7a;
-	 font-weight: normal;
-	 position: relative;
-	 margin: 0;
-	    border-bottom: 1px solid #e8e8e8;
-	    display: block;
-	 text-transform: inherit;
+	.cat-mega-menu>li.cat-mega-title>a, .cat-mega-menu>li>ul>li>a, .cat-dropdown>li>a {
+		padding: 10px 25px 10px 35px;
+		line-height: 18px;
+		font-size: 13px;
+		color: #7a7a7a;
+		font-weight: normal;
+		position: relative;
+		margin: 0;
+		border-bottom: 1px solid #e8e8e8;
+		display: block;
+		text-transform: inherit;
 	}
-	.cat-mega-menu > li.cat-mega-title:last-child > a,
-	.cat-mega-menu > li > ul > li:last-child > a,
-	.cat-dropdown > li:last-child > a{
-	    border-bottom: 0;        
+	.cat-mega-menu>li.cat-mega-title:last-child>a, .cat-mega-menu>li>ul>li:last-child>a, .cat-dropdown>li:last-child>a {
+		border-bottom: 0;
 	}
 }
+
 /* Small Mobile Device :480px. */
+
 @media (min-width: 480px) and (max-width: 575px) {
 	/*Home Version One Area*/
 	/*Header Top*/
@@ -456,14 +455,14 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.slider-content {
 		padding-left: 35px;
 	}
-	.slider-content > h2 {
+	.slider-content>h2 {
 		font-size: 24px;
 		max-width: 220px;
 	}
-	.slider-content > h3 {
+	.slider-content>h3 {
 		font-size: 16px;
 	}
-	.slider-content > h3 > span {
+	.slider-content>h3>span {
 		font-size: 22px;
 	}
 	/*Li's Banner | Featured Banner | Single Banner*/
@@ -477,7 +476,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.li-product-menu li a {
 		padding: 0 7.5px 0 7.5px;
 	}
-	.li-product-menu > li:first-child a {
+	.li-product-menu>li:first-child a {
 		padding-left: 0;
 	}
 	/*Trending Product*/
@@ -488,21 +487,20 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.li-trending-product-menu {
 		padding-top: 15px;
 	}
-	.li-product-menu > li > a > span {
+	.li-product-menu>li>a>span {
 		font-size: 14px;
 	}
-	.li-product-menu > li > a span::before, 
-	.li-product-menu > li > a.active span::before {
+	.li-product-menu>li>a span::before, .li-product-menu>li>a.active span::before {
 		bottom: -13px;
 	}
 	/*Li's Static Home Area*/
 	.li-static-home-content {
 		padding-left: 25px;
 	}
-	.li-static-home-content > h2 {
+	.li-static-home-content>h2 {
 		font-size: 24px;
 	}
-	.li-static-home-content > p.schedule span {
+	.li-static-home-content>p.schedule span {
 		font-size: 18px;
 	}
 	/*Footer Shipping Area*/
@@ -518,100 +516,97 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		border: none;
 	}
 	/*Category MenuHome | Two & Three Style*/
-	.category-menu-list > ul > li.right-menu > a:after {
-	 display: none;
+	.category-menu-list>ul>li.right-menu>a:after {
+		display: none;
 	}
 	.category-menu {
-	 width: 100%;
-	 position: relative;
+		width: 100%;
+		position: relative;
 	}
-	.cat-mega-menu,
-	.cat-dropdown {
-	 position: static;
-	 z-index: 9;
-	 opacity: 1;
-	 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	 visibility: visible;
-	 background-color: transparent;
-	 padding: 0;
-	    box-shadow: none;
-	    border: 0;
-	 width: 100%;
-	 -webkit-transition: none;
-	 transition: none;
+	.cat-mega-menu, .cat-dropdown {
+		position: static;
+		z-index: 9;
+		opacity: 1;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		visibility: visible;
+		background-color: transparent;
+		padding: 0;
+		box-shadow: none;
+		border: 0;
+		width: 100%;
+		-webkit-transition: none;
+		transition: none;
 	}
-	.category-menu-list > ul > li i {
-	 position: absolute;
-	 right: 0;
-	 top: 0;
-	 cursor: pointer;
-	 height: 40px;
-	 width: 40px;
-	 line-height: 40px;
-	 z-index: 9;
+	.category-menu-list>ul>li i {
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: pointer;
+		height: 40px;
+		width: 40px;
+		line-height: 40px;
+		z-index: 9;
 	}
-	.category-menu-list > ul > li i:before {
-	 background-color: #606060;
-	 width: 8px;
-	 height: 2px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-left: -4px;
-	 margin-top: -1px;
-	 top: 50%;
+	.category-menu-list>ul>li i:before {
+		background-color: #606060;
+		width: 8px;
+		height: 2px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -1px;
+		top: 50%;
 	}
-	.category-menu-list > ul > li i:after {
-	 background-color: #606060;
-	 width: 2px;
-	 height: 8px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-top: -4px;
-	 margin-left: -1px;
-	 top: 50%;
-	 -webkit-transition: all 0.3s ease 0s;
-	 transition: all 0.3s ease 0s;
-	 -webkit-transform: scaleY(0);
-	 transform: scaleY(0);
+	.category-menu-list>ul>li i:after {
+		background-color: #606060;
+		width: 2px;
+		height: 8px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-top: -4px;
+		margin-left: -1px;
+		top: 50%;
+		-webkit-transition: all 0.3s ease 0s;
+		transition: all 0.3s ease 0s;
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
 	}
-	.category-menu-list > ul > li i.expand:after {
-	 -webkit-transform: scaleY(1);
-	 transform: scaleY(1);
+	.category-menu-list>ul>li i.expand:after {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
 	}
-	li.right-menu .cat-mega-menu > li {
-	 -webkit-box-flex: 0;
-	     -ms-flex: 0 0 100%;
-	         flex: 0 0 100%;
-	    width: 100%;
-	 padding: 0;
-	 position: relative;
+	li.right-menu .cat-mega-menu>li {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 100%;
+		flex: 0 0 100%;
+		width: 100%;
+		padding: 0;
+		position: relative;
 	}
-	.cat-mega-menu > li.cat-mega-title > a:after{
-	    display: none;        
+	.cat-mega-menu>li.cat-mega-title>a:after {
+		display: none;
 	}
-	.cat-mega-menu > li.cat-mega-title > a,
-	.cat-mega-menu > li > ul > li > a,
-	.cat-dropdown > li > a{
-	 padding: 10px 25px 10px 35px;
-	 line-height: 18px;
-	 font-size: 13px;
-	 color: #7a7a7a;
-	 font-weight: normal;
-	 position: relative;
-	 margin: 0;
-	    border-bottom: 1px solid #e8e8e8;
-	    display: block;
-	 text-transform: inherit;
+	.cat-mega-menu>li.cat-mega-title>a, .cat-mega-menu>li>ul>li>a, .cat-dropdown>li>a {
+		padding: 10px 25px 10px 35px;
+		line-height: 18px;
+		font-size: 13px;
+		color: #7a7a7a;
+		font-weight: normal;
+		position: relative;
+		margin: 0;
+		border-bottom: 1px solid #e8e8e8;
+		display: block;
+		text-transform: inherit;
 	}
-	.cat-mega-menu > li.cat-mega-title:last-child > a,
-	.cat-mega-menu > li > ul > li:last-child > a,
-	.cat-dropdown > li:last-child > a{
-	    border-bottom: 0;        
+	.cat-mega-menu>li.cat-mega-title:last-child>a, .cat-mega-menu>li>ul>li:last-child>a, .cat-dropdown>li:last-child>a {
+		border-bottom: 0;
 	}
 }
+
 /* Extra Small Mobile Device :320px. */
+
 @media (max-width: 479px) {
 	/*Home Version One Area*/
 	/*Header Top*/
@@ -626,11 +621,11 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.ht-menu {
 		flex-direction: row-reverse;
 	}
-	.ht-menu > li {
+	.ht-menu>li {
 		padding: 0 15px;
 		display: block;
 	}
-	.ht-setting-list > li > a {
+	.ht-setting-list>li>a {
 		padding: 0 5px;
 	}
 	.minicart {
@@ -683,14 +678,14 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.slider-content {
 		padding-left: 35px;
 	}
-	.slider-content > h2 {
+	.slider-content>h2 {
 		font-size: 24px;
 		max-width: 220px;
 	}
-	.slider-content > h3 {
+	.slider-content>h3 {
 		font-size: 16px;
 	}
-	.slider-content > h3 > span {
+	.slider-content>h3>span {
 		font-size: 22px;
 	}
 	/*Product Area*/
@@ -711,36 +706,36 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.li-trending-product-menu {
 		padding-top: 15px;
 	}
-	.li-product-menu > li > a > span {
+	.li-product-menu>li>a>span {
 		font-size: 15px;
 		line-height: 30px;
 	}
-	.li-product-menu > li > a span::before, .li-product-menu > li > a.active span::before {
+	.li-product-menu>li>a span::before, .li-product-menu>li>a.active span::before {
 		bottom: 0;
 	}
 	/*Laptop Area*/
-	.li-sub-category-list > li {
+	.li-sub-category-list>li {
 		display: block;
 		float: right;
 		padding-top: 10px;
 	}
-	.li-sub-category-list > li > a {
+	.li-sub-category-list>li>a {
 		margin: 0 5px 0 5px;
-	} 
-	.li-section-title > h2 > span::before {
+	}
+	.li-section-title>h2>span::before {
 		bottom: -22px;
 	}
-	.li-sub-category-list > li > a::after {
+	.li-sub-category-list>li>a::after {
 		bottom: -16px;
 	}
 	/*Li's Static Home Area*/
 	.li-static-home-content {
 		padding-left: 25px;
 	}
-	.li-static-home-content > h2 {
+	.li-static-home-content>h2 {
 		font-size: 24px;
 	}
-	.li-static-home-content > p.schedule span {
+	.li-static-home-content>p.schedule span {
 		font-size: 18px;
 	}
 	/*Li's Featured Product Area*/
@@ -762,16 +757,16 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		border: none;
 	}
 	/*Footer Middle Area*/
-	.social-link > li > a {
+	.social-link>li>a {
 		width: 30px;
 		height: 30px;
 		line-height: 33px !important;
 	}
 	/*Single Product Page*/
-	.product-social-sharing > ul > li {
+	.product-social-sharing>ul>li {
 		padding: 0;
 	}
-	.product-social-sharing > ul > li > a {
+	.product-social-sharing>ul>li>a {
 		font-size: 10px;
 		padding: 4px;
 	}
@@ -785,7 +780,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 	.error-text h2 {
 		font-size: 28px;
 	}
-	.error-text > p {
+	.error-text>p {
 		font-size: 17px;
 	}
 	#search-form {
@@ -810,97 +805,92 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		padding-bottom: 45px !important;
 	}
 	/*Category MenuHome | Two & Three Style*/
-	.category-menu-list > ul > li.right-menu > a:after {
-	 display: none;
+	.category-menu-list>ul>li.right-menu>a:after {
+		display: none;
 	}
 	.category-menu {
-	 width: 100%;
-	 position: relative;
+		width: 100%;
+		position: relative;
 	}
-	.cat-mega-menu,
-	.cat-dropdown {
-	 position: static;
-	 z-index: 9;
-	 opacity: 1;
-	 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	 visibility: visible;
-	 background-color: transparent;
-	 padding: 0;
-	    box-shadow: none;
-	    border: 0;
-	 width: 100%;
-	 -webkit-transition: none;
-	 transition: none;
+	.cat-mega-menu, .cat-dropdown {
+		position: static;
+		z-index: 9;
+		opacity: 1;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		visibility: visible;
+		background-color: transparent;
+		padding: 0;
+		box-shadow: none;
+		border: 0;
+		width: 100%;
+		-webkit-transition: none;
+		transition: none;
 	}
-	.category-menu-list > ul > li i {
-	 position: absolute;
-	 right: 0;
-	 top: 0;
-	 cursor: pointer;
-	 height: 40px;
-	 width: 40px;
-	 line-height: 40px;
-	 z-index: 9;
+	.category-menu-list>ul>li i {
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: pointer;
+		height: 40px;
+		width: 40px;
+		line-height: 40px;
+		z-index: 9;
 	}
-	.category-menu-list > ul > li i:before {
-	 background-color: #606060;
-	 width: 8px;
-	 height: 2px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-left: -4px;
-	 margin-top: -1px;
-	 top: 50%;
+	.category-menu-list>ul>li i:before {
+		background-color: #606060;
+		width: 8px;
+		height: 2px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -1px;
+		top: 50%;
 	}
-	.category-menu-list > ul > li i:after {
-	 background-color: #606060;
-	 width: 2px;
-	 height: 8px;
-	 content: "";
-	 position: absolute;
-	 left: 50%;
-	 margin-top: -4px;
-	 margin-left: -1px;
-	 top: 50%;
-	 -webkit-transition: all 0.3s ease 0s;
-	 transition: all 0.3s ease 0s;
-	 -webkit-transform: scaleY(0);
-	 transform: scaleY(0);
+	.category-menu-list>ul>li i:after {
+		background-color: #606060;
+		width: 2px;
+		height: 8px;
+		content: "";
+		position: absolute;
+		left: 50%;
+		margin-top: -4px;
+		margin-left: -1px;
+		top: 50%;
+		-webkit-transition: all 0.3s ease 0s;
+		transition: all 0.3s ease 0s;
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
 	}
-	.category-menu-list > ul > li i.expand:after {
-	 -webkit-transform: scaleY(1);
-	 transform: scaleY(1);
+	.category-menu-list>ul>li i.expand:after {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
 	}
-	li.right-menu .cat-mega-menu > li {
-	 -webkit-box-flex: 0;
-	     -ms-flex: 0 0 100%;
-	         flex: 0 0 100%;
-	    width: 100%;
-	 padding: 0;
-	 position: relative;
+	li.right-menu .cat-mega-menu>li {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 100%;
+		flex: 0 0 100%;
+		width: 100%;
+		padding: 0;
+		position: relative;
 	}
-	.cat-mega-menu > li.cat-mega-title > a:after{
-	    display: none;        
+	.cat-mega-menu>li.cat-mega-title>a:after {
+		display: none;
 	}
-	.cat-mega-menu > li.cat-mega-title > a,
-	.cat-mega-menu > li > ul > li > a,
-	.cat-dropdown > li > a{
-	 padding: 10px 25px 10px 35px;
-	 line-height: 18px;
-	 font-size: 13px;
-	 color: #7a7a7a;
-	 font-weight: normal;
-	 position: relative;
-	 margin: 0;
-	    border-bottom: 1px solid #e8e8e8;
-	    display: block;
-	 text-transform: inherit;
+	.cat-mega-menu>li.cat-mega-title>a, .cat-mega-menu>li>ul>li>a, .cat-dropdown>li>a {
+		padding: 10px 25px 10px 35px;
+		line-height: 18px;
+		font-size: 13px;
+		color: #7a7a7a;
+		font-weight: normal;
+		position: relative;
+		margin: 0;
+		border-bottom: 1px solid #e8e8e8;
+		display: block;
+		text-transform: inherit;
 	}
-	.cat-mega-menu > li.cat-mega-title:last-child > a,
-	.cat-mega-menu > li > ul > li:last-child > a,
-	.cat-dropdown > li:last-child > a{
-	    border-bottom: 0;        
+	.cat-mega-menu>li.cat-mega-title:last-child>a, .cat-mega-menu>li>ul>li:last-child>a, .cat-dropdown>li:last-child>a {
+		border-bottom: 0;
 	}
 	/*Blog Details Page*/
 	.li-blog-single-item .li-blog-content .li-blog-details h3 {
@@ -911,6 +901,9 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		font-size: 25px;
 	}
 }
+
 /*----------------------------------------------------------------------------------------------------*/
+
 /*------------------------------------------> The End <-----------------------------------------------*/
+
 /*----------------------------------------------------------------------------------------------------*/

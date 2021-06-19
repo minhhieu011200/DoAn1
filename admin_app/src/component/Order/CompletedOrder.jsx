@@ -57,13 +57,14 @@ function CompletedOrder(props) {
                         <div className="card">
                             <div className="card-body">
                                 <h4 className="card-title">Complete Order</h4>
-                                <h4 className="card-title">TotalMoney: {totalMoney}$</h4>
+                                <h4 className="card-title">TotalMoney: {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(totalMoney) + ' VNĐ'}</h4>
                                 <Search handlerSearch={handlerSearch} />
                                 <div className="table-responsive mt-3">
                                     <table className="table table-striped table-bordered no-wrap">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>CreateDate</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
@@ -80,8 +81,20 @@ function CompletedOrder(props) {
                                                 order && order.map((value, index) => (
                                                     <tr key={index}>
                                                         <td className="name">{value._id}</td>
+                                                        <td className="li-product-price">
+                                                            <span className="amount">
+                                                                {new Intl.DateTimeFormat("it-IT", {
+                                                                    year: "numeric",
+                                                                    month: "numeric",
+                                                                    day: "numeric",
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                    second: "numeric"
+                                                                }).format(new Date(value.createDate))}
+                                                            </span>
+                                                        </td>
                                                         <td className="name">{value.id_note.fullname}</td>
-                                                        <td className="name">{value.id_user.email}</td>
+                                                        <td className="name">{value.id_user ? value.id_user.email : ""}</td>
                                                         <td className="name">{value.id_note.phone}</td>
                                                         <td className="name">{value.address}</td>
                                                         <td>
@@ -95,7 +108,7 @@ function CompletedOrder(props) {
                                                                 }
                                                             })()}
                                                         </td>
-                                                        <td className="name">{value.total}</td>
+                                                        <td className="name">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.total) + ' VNĐ'}</td>
                                                         <td className="name">{value.pay === true ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                                                         <td>
                                                             <div className="d-flex">

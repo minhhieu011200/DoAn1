@@ -15,9 +15,11 @@ module.exports.detail = async (req, res) => {
 
 // Phuong Thuc Post
 module.exports.post_detail_order = async (req, res) => {
-
-    await Detail_Order.create(req.body)
-
+    const id_order = req.body.id_order
+    let cartItem = req.body.cartItem
+    let cartArr = cartItem.map(e => {
+        return Object.assign({}, e, { id_order: id_order });
+    })
+    await Detail_Order.insertMany(cartArr);
     res.send("Thanh Cong")
-
 }

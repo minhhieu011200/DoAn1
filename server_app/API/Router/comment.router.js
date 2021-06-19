@@ -8,4 +8,6 @@ router.get('/:id', Comment.index)
 
 router.post('/:id', Comment.post_comment)
 
+router.delete('/:id', Comment.delete)
+
 module.exports = router

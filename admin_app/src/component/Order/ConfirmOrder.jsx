@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'
+import axios from 'axios';
+import crypto from 'crypto'
+import { v4 as uuidv4 } from 'uuid';
 
 import orderAPI from '../Api/orderAPI';
 import Pagination from '../Shared/Pagination'
@@ -9,7 +12,7 @@ import Search from '../Shared/Search'
 
 import io from "socket.io-client";
 
-const socket = io('https://hieusuper20hcm.herokuapp.com/', {
+const socket = io(process.env.REACT_APP_API, {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -51,10 +54,12 @@ function ConfirmOrder(props) {
 
     //Hàm này dùng để nhận socket từ server gửi lên
     useEffect(() => {
-
-        //Nhận dữ liệu từ server gửi lên thông qua socket với key receive_order
         socket.on('receive_order', (data) => {
             setNote(data)
+            setFilter({
+                ...filter,
+                change: !filter.change
+            })
         })
 
     }, [])
@@ -81,10 +86,55 @@ function ConfirmOrder(props) {
     }
 
     const handleCancel = async (value) => {
-        const query = '?' + queryString.stringify({ id: value._id })
+        if (value.id_momo && !value.id_momo.refund && value.status !== "5") {
+            const path = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
+            const partnerCode = process.env.REACT_APP_PARTNER_CODE
+            const accessKey = process.env.REACT_APP_ACCESS_KEY
+            const serectkey = process.env.REACT_APP_SECRET_KEY
+            const amount = value.total.toString()
+            const requestId = uuidv4()
+            const transId = value.id_momo.transId
+            const orderId = value.id_momo.orderId
+            const requestType = "refundMoMoWallet"
+
+            const rawSignature = `partnerCode=${partnerCode}&accessKey=${accessKey}&requestId=${requestId}&amount=${amount}&orderId=${orderId}&transId=${transId}&requestType=${requestType}`
+
+            var signature = crypto.createHmac('sha256', serectkey)
+                .update(rawSignature)
+                .digest('hex');
+
+            var body = JSON.stringify({
+                partnerCode: partnerCode,
+                accessKey: accessKey,
+                requestId: requestId,
+                amount: amount,
+                orderId: orderId,
+                transId: transId,
+                requestType: requestType,
+                signature: signature
+
+            })
+            axios.post(path, body)
+                .then(response => {
+                    if (response.data.errorCode == 0) {
+                        cancelAPI(value, value.id_momo._id)
+                    }
+                    else {
+                        cancelAPI(value, "")
+                    }
+                })
+                .catch(error => {
+                    cancelAPI(value, "")
+                })
+        } else {
+            cancelAPI(value, "")
+        }
+    }
+
+    const cancelAPI = async (value, id) => {
+        const query = '?' + queryString.stringify({ id: value._id, id_momo: id })
 
         const response = await orderAPI.cancelOrder(query)
-
         if (response.msg === "Thanh Cong") {
             setFilter({
                 ...filter,
@@ -113,6 +163,7 @@ function ConfirmOrder(props) {
                                             <tr>
                                                 <th>Action</th>
                                                 <th>ID</th>
+                                                <th>CreateDate</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
@@ -138,8 +189,20 @@ function ConfirmOrder(props) {
                                                             </div>
                                                         </td>
                                                         <td className="name">{value._id}</td>
+                                                        <td className="li-product-price">
+                                                            <span className="amount">
+                                                                {new Intl.DateTimeFormat("it-IT", {
+                                                                    year: "numeric",
+                                                                    month: "numeric",
+                                                                    day: "numeric",
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                    second: "numeric"
+                                                                }).format(new Date(value.createDate))}
+                                                            </span>
+                                                        </td>
                                                         <td className="name">{value.id_note.fullname}</td>
-                                                        <td className="name">{value.id_user.email}</td>
+                                                        <td className="name">{value.id_user ? value.id_user.email : ""}</td>
                                                         <td className="name">{value.id_note.phone}</td>
                                                         <td className="name">{value.address}</td>
                                                         <td>
@@ -153,7 +216,7 @@ function ConfirmOrder(props) {
                                                                 }
                                                             })()}
                                                         </td>
-                                                        <td className="name">{value.total}</td>
+                                                        <td>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.total) + ' VNĐ'}</td>
                                                         <td className="name">{value.pay === true ? "Đã thanh toán" : "Chưa thanh toán"}</td>
 
                                                     </tr>
@@ -170,7 +233,7 @@ function ConfirmOrder(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-        </footer>
+            </footer>
         </div>
     );
 }

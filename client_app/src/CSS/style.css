@@ -1094,7 +1094,6 @@ textarea:focus {
 	padding: 0 !important;
 	width: 100%;
 	box-shadow: none;
-	display: none;
 	float: left;
 	opacity: 1;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
@@ -1646,7 +1645,6 @@ textarea:focus {
 }
 
 .hm-searchbox {
-	display: flex;
 	position: relative;
 	background: #fff;
 	border-radius: 5px;

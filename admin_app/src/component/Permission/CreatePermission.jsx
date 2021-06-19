@@ -11,7 +11,7 @@ function CreatePermission(props) {
 
     const validateAll = () => {
         let msg = {}
-        if (isEmpty(name)) {
+        if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         }
 
@@ -21,10 +21,8 @@ function CreatePermission(props) {
     }
 
     const handleCreate = () => {
-
         const isValid = validateAll();
         if (!isValid) return
-        console.log(name)
         addPermission();
     }
 
@@ -79,7 +77,7 @@ function CreatePermission(props) {
             </div>
             <footer className="footer text-center text-muted">
                 All Rights Reserved by Adminmart. Designed and Developed by Minh Hiếu.
-    </footer>
+            </footer>
         </div>
     );
 }

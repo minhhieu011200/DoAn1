@@ -1,48 +1,47 @@
 import React, { useContext, useState, useEffect } from 'react';
-import io from "socket.io-client";
 import { Redirect } from 'react-router-dom'
-import { CartContext } from '../context/CartContext'
-import { AuthContext } from '../context/AuthContext'
+import { Base64 } from 'js-base64';
 import isEmpty from 'validator/lib/isEmpty'
 import { useForm } from "react-hook-form";
-import PlacesAutocomplete, {
-    geocodeByAddress,
-    getLatLng
-} from 'react-places-autocomplete';
-import orderAPI from '../API/order';
-import detailOrderAPI from '../API/detailOrder';
-import noteAPI from '../API/note';
-import Address from './Address'
 
-const socket = io('http://localhost:8000/', {
-    transports: ['websocket'], jsonp: false
-});
-socket.connect();
+import { CartContext } from '../context/CartContext'
+import { AuthContext } from '../context/AuthContext'
+
+import orderAPI from '../API/order';
+import couponAPI from '../API/coupon';
+import MoMo from './MoMo'
+import Map from './Map'
+
 
 function Checkout(props) {
-    const { cartItem, sumPrice, checkOut } = useContext(CartContext);
+    const { cartItem, sumPrice, checkOut, redirect, check, setSumCount, setCheck } = useContext(CartContext);
     const { user } = useContext(AuthContext);
     const [address, setAddress] = useState('')
     const [fullname, setFullname] = useState('')
     const [phone, setPhone] = useState('')
-    const [price] = useState(15000)
-    const [total, setSumTotal] = useState()
-    const [redirect, set_redirect] = useState(false)
+    const [price, setPrice] = useState()
+    const [coupon, setCoupon] = useState(0)
+    const [code, setCode] = useState('')
+    const [show_error, set_show_error] = useState(false)
+    const [flag, setFlag] = useState(false)
+    const [extraData, setExtraData] = useState()
+    const [total, setTotal] = useState()
+    const [errorCode, setErrorCode] = useState('')
+    const [discount, setDiscount] = useState(0)
+    const [loadMap, setLoadMap] = useState(true)
+
+    useEffect(async () => {
+        setTotal(sumPrice + Number(price) - (((sumPrice * Number(coupon)) / 100)))
+        setDiscount((sumPrice * Number(coupon)) / 100)
+
+    }, [sumPrice, price, coupon])
 
     useEffect(() => {
-        setSumTotal(Number(price) + Number(sumPrice))
+        if (cartItem.length < 1 || !user) {
+            props.history.push('/cart')
+        }
     }, [])
 
-    if (cartItem.length < 1 || !user) {
-        props.history.push('/cart')
-    }
-    const handleSelect = async value => {
-        // const result = await geocodeByAddress(value);
-        // const lating = await getLatLng(result[0])
-        setAddress(value)
-        // console.log(lating)
-        // setCoordinates(lating)
-    }
 
     const [validationMsg, setValidationMsg] = useState('');
     const { handleSubmit } = useForm();
@@ -63,192 +62,288 @@ function Checkout(props) {
         return true;
     }
 
+    const checkCoupon = async () => {
+        if (isEmpty(code)) {
+            setCoupon(0)
+            return
+        }
+        const body = {
+            rank: user.id_rank._id,
+            id_user: user,
+            code: code
+        }
+
+        const response = await couponAPI.checkCoupon(body)
+
+        if (response.msg !== "Thành công") {
+            setErrorCode(response.msg)
+            setCoupon(0)
+        } else {
+            setErrorCode("")
+            setCoupon(response.coupon.promotion)
+        }
+    }
+
     const handleCheckout = async () => {
+        if (cartItem.length < 1 || !user) {
+            return props.history.push('/cart')
+        }
         const isValid = validateAll();
         if (!isValid) return
-        const data_delivery = {
-            fullname: fullname,
-            phone: phone,
-        }
+        if (!flag) {
+            setFlag(true)
+            if (discount > 0) {
+                const body = {
+                    rank: user.id_rank._id,
+                    id_user: user._id,
+                    code: code,
+                    payment: "6086709cdc52ab1ae999e882"
+                }
+                const response = await couponAPI.checkCoupon(body)
 
-        // Xứ lý API Delivery
-        const response_delivery = await noteAPI.post_note(data_delivery)
-
-        var today = new Date();
-        var time = today.getHours() + ":" + today.getMinutes() + " " + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
-
-        // data Order
-        const data_order = {
-            id_user: user._id,
-            address: address,
-            total: total,
-            status: "1",
-            pay: false,
-            id_payment: '6086709cdc52ab1ae999e882',
-            id_note: response_delivery._id,
-            feeship: price,
-            createDate: time
-        }
-
-        // Xứ lý API Order
-        const response_order = await orderAPI.post_order(data_order)
-
-
-        // Xử lý API Detail_Order
-        for (let i = 0; i < cartItem.length; i++) {
-
-            const data_detail_order = {
-                id_order: response_order._id,
-                id_product: cartItem[i].id_product,
-                name_product: cartItem[i].name_product,
-                price_product: cartItem[i].price_product,
-                count: cartItem[i].count
+                if (response.msg !== "Thành công") {
+                    setErrorCode(response.msg)
+                    setCoupon(0)
+                    setTimeout(() => {
+                        setFlag(false)
+                    }, 2000)
+                    return
+                }
             }
 
-            await detailOrderAPI.post_detail_order(data_detail_order)
+            checkOut(fullname, phone, user._id, address, total, "1", false, '6086709cdc52ab1ae999e882', price, code, discount)
 
+            setTimeout(() => {
+                setFlag(false)
+            }, 2000)
         }
-
-        socket.emit('send_order', "Có người vừa đặt hàng")
-        set_redirect(true)
-        checkOut();
-
-
-
     }
+
+    const handleMoMo = async () => {
+        if (cartItem.length < 1 || !user) {
+            return props.history.push('/cart')
+        }
+        const isValid = validateAll();
+        if (!isValid) return
+
+        if (!flag) {
+            setFlag(true)
+            if (discount > 0) {
+                const body = {
+                    id_user: user._id,
+                    rank: user.id_rank._id,
+                    code: code,
+                    payment: "60afcfcedc48d73138aceaf6"
+                }
+                const response = await couponAPI.checkCoupon(body)
+                if (response.msg !== "Thành công") {
+                    setErrorCode(response.msg)
+                    setCoupon(0)
+                    setTimeout(() => {
+                        setFlag(false)
+                    }, 2000)
+                    return
+                }
+            }
+
+            const response = await orderAPI.checkCart({ cartItem: cartItem })
+            if (response.msg !== "Thanh Cong") {
+                setCheck(response.msg)
+                localStorage.setItem('carts', JSON.stringify(response.cart))
+                setTimeout(() => {
+                    setSumCount(0)
+                    setCheck("")
+                }, 2000)
+            } else {
+                const data = {
+                    fullname: fullname,
+                    phone: phone,
+                    id_user: user._id,
+                    address: address,
+                    total: total,
+                    id_payment: '60afcfcedc48d73138aceaf6',
+                    feeship: price,
+                    cartItem: cartItem,
+                    code: code,
+                    discount: discount === 0 ? undefined : discount
+                }
+
+                const base = Base64.encode(JSON.stringify(data));
+                setExtraData(base)
+                console.log(base)
+
+                set_show_error(true)
+                setTimeout(() => {
+                    set_show_error(false)
+                }, 2000)
+            }
+            setTimeout(() => {
+                setFlag(false)
+            }, 2000)
+        }
+    }
+
+    const handleCheckDistance = (address, price) => {
+        setAddress(address)
+        setPrice(price)
+        setLoadMap(false)
+    }
+
+
 
     return (
 
+
         <div className="container" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
-            {/* {
-                <Map />
-            } */}
-            <div className="row">
-                <div className="col-lg-6 col-12 pb-5">
-                    <form onSubmit={handleSubmit(handleCheckout)}>
-                        <div className="checkbox-form">
-                            <h3>Billing Details</h3>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="checkout-form-list">
-                                        <label htmlFor="fullname">Full Name </label>
-                                        <input placeholder="Enter Fullname" type="text" name="fullname" id="fullname" value={fullname} onChange={(e) => setFullname(e.target.value)} />
-                                        <p className="form-text text-danger">{validationMsg.fullname}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-12">
-                                    <div className="checkout-form-list">
-                                        <label htmlFor="phone">Phone Number </label>
-                                        <input placeholder="Enter Phone Number" type="text" name="phone" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                                        <p className="form-text text-danger">{validationMsg.phone}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-12">
-                                    {/* <div className="checkout-form-list">
-                                        <label>Address <span className="required">*</span></label>
-                                        <input placeholder="Street address" type="text" name="address" />
-                                    </div> */}
-                                    <PlacesAutocomplete placeholder="Enter A Location" value={address} onChange={setAddress} onSelect={handleSelect}>
-                                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) =>
-                                        (
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="address">To</label>
-                                                <input {...getInputProps({ placeholder: "Enter A Location", id: "address", name: "address" })} />
-                                                <p className="form-text text-danger">{validationMsg.address}</p>
-                                                {/* {loading && <div>Loading...</div>} */}
-                                                {suggestions.map((suggestion, index) => {
-                                                    return (
-                                                        <div key={index} {...getSuggestionItemProps(suggestion)}>
-                                                            <input type="text" name="from"
-                                                                id="from_places"
-                                                                disabled
-                                                                value={suggestion.description} />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </PlacesAutocomplete>
-                                </div>
-                                <div className="col-md-12">
-                                    <div className="order-button-payment">
-                                        {
-                                            redirect && <Redirect to="/ordersuccess" />
-                                        }
-                                        <button type="submit" className="li-button li-button-fullwidth">Place order</button>
-                                    </div>
-                                </div >
-                            </div >
-                        </div >
-                    </form >
-                </div >
-                <div className="col-lg-6 col-12">
-                    <div className="your-order">
-                        <h3>Your order</h3>
-                        <div className="your-order-table table-responsive">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th className="cart-product-name">Product</th>
-                                        <th className="cart-product-total">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        cartItem && cartItem.map(value => (
-                                            <tr className="cart_item" key={value._id}>
-                                                <td className="cart-product-name">{value.name_product}<strong className="product-quantity"> × {value.count}</strong></td>
-                                                <td className="cart-product-total"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(parseInt(value.price_product) * parseInt(value.count)) + 'VNĐ'}</span></td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                                <tfoot>
-                                    <tr className="cart-subtotal">
-                                        <th>Shipping Cost</th>
-                                        <td><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(price) + 'VNĐ'}</span></td>
-                                    </tr>
-                                    <tr className="order-total">
-                                        <th>Order Total</th>
-                                        <td><strong><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total) + 'VNĐ'}</span></strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+            {
+                check !== "" && check !== "Thanh Cong" &&
+                <div className="modal_success">
+                    <div className="group_model_success pt-3">
+                        <div className="text-center p-2">
+                            <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff', backgroundColor: '#f84545' }}></i>
                         </div>
-                        <div className="payment-method">
-                            <div className="payment-accordion">
-                                <div id="accordion">
-                                    <div className="card">
-                                        <div className="card-header" id="#payment-3">
-                                            <h5 className="panel-title">
-                                                <a className="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                    PayPal
-                                                </a>
-                                            </h5>
-                                        </div>
-                                        {/* <div id="collapseThree" className="collapse">
-                                            <div className="card-body">
-                                                {
-                                                    show_error ? 'Please Checking Information!' :
-                                                        <Paypal
-                                                            information={information}
-                                                            total={total_price}
-                                                            Change_Load_Order={Change_Load_Order}
-                                                            from={from}
-                                                            distance={distance}
-                                                            duration={duration}
-                                                            price={price}
-                                                        />
-                                                }
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{check}</h4>
+                    </div>
+                </div>
+            }
+
+            {
+                !loadMap ? (
+                    <div className="row">
+                        <div className="col-lg-6 col-12 pb-5">
+                            <form onSubmit={handleSubmit(handleCheckout)}>
+                                <div className="checkbox-form">
+                                    <h3>Billing Details</h3>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="fullname">Full Name </label>
+                                                <input placeholder="Enter Fullname" type="text" name="fullname" id="fullname" value={fullname} onChange={(e) => setFullname(e.target.value)} />
+                                                <p className="form-text text-danger">{validationMsg.fullname}</p>
                                             </div>
-                                        </div > */}
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="phone">Phone Number </label>
+                                                <input placeholder="Enter Phone Number" type="text" name="phone" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                <p className="form-text text-danger">{validationMsg.phone}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="address">Address:</label>
+                                                <div className="d-flex">
+                                                    <input type="text" className="form-control" id="address" name="address" value={address} disabled />
+                                                    <button type="button" onClick={() => setLoadMap(true)} className="register-button" style={{ cursor: 'pointer', padding: '0px', margin: '0px', height: '43px' }}>Change</button>
+                                                </div>
+
+                                                <p className="form-text text-danger">{validationMsg.address}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="code">Coupon</label>
+                                                <div className="d-flex">
+                                                    <input placeholder="Enter Coupon" type="text" name="code" id="code" value={code} onChange={(e) => setCode(e.target.value)} />
+                                                    <button type="button" onClick={checkCoupon} className="register-button" style={{ cursor: 'pointer', padding: '0px', margin: '0px', height: '43px' }}>Check</button>
+                                                </div>
+
+                                                <p className="form-text text-danger">{errorCode}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="order-button-payment">
+                                                {
+                                                    redirect && <Redirect to="/ordersuccess" />
+                                                }
+                                                <button type="submit" className="btn li-button li-button-fullwidth checkout">Place order</button>
+                                            </div>
+                                        </div >
+                                    </div >
+                                </div >
+                            </form >
+                        </div >
+                        <div className="col-lg-6 col-12">
+                            <div className="your-order">
+                                <h3>Your order</h3>
+                                <div className="your-order-table table-responsive">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th className="cart-product-name">Product</th>
+                                                <th className="cart-product-total">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                cartItem && cartItem.map(value => (
+                                                    <tr className="cart_item" key={value._id}>
+                                                        <td className="cart-product-name">{value.name_product}<strong className="product-quantity"> × {value.count}</strong></td>
+                                                        <td className="cart-product-total"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(parseInt(value.price_product) * parseInt(value.count)) + 'VNĐ'}</span></td>
+                                                    </tr>
+                                                ))
+                                            }
+                                            {
+                                                discount > 0 &&
+                                                (
+                                                    <tr>
+                                                        <th>Discount</th>
+                                                        <th><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(discount) + 'VNĐ'}</span></th>
+                                                    </tr>
+                                                )
+                                            }
+                                            <tr>
+                                                <th>Shipping Cost</th>
+                                                <th><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(price) + 'VNĐ'}</span></th>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+
+                                            <tr className="order-total">
+                                                <th>Order Total</th>
+                                                <td><strong><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total) + 'VNĐ'}</span></strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div className="payment-method">
+                                    <div className="payment-accordion">
+                                        <div id="accordion">
+                                            <div className="card">
+
+                                                <div className="card-header" id="#payment-3">
+                                                    <h5 className="panel-title">
+                                                        <a className="collapsed" data-toggle="collapse" data-target="#collapseMoMo" aria-expanded="false" aria-controls="collapseThree">
+                                                            MoMo
+                                                        </a>
+                                                    </h5>
+                                                </div>
+
+                                                <div id="collapseMoMo" className="collapse" onClick={handleMoMo}>
+                                                    <div className="card-body">
+                                                        <img src="https://developers.momo.vn/images/logo.png" width="50" />
+                                                        {
+                                                            show_error && <MoMo extraData={extraData} total={total} />
+                                                        }
+                                                    </div>
+                                                </div >
+
+                                            </div >
+                                        </div >
                                     </div >
                                 </div >
                             </div >
                         </div >
                     </div >
-                </div >
-            </div >
+
+                ) : (
+                    <Map handleCheckDistance={handleCheckDistance} />
+                )
+            }
+
+
 
         </div >
     );

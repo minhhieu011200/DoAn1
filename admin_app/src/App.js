@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import './App.css';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
 } from "react-router-dom";
 
-import AuthContextProvider from './component/context/Auth'
+import { AuthContext } from './component/context/Auth'
+
 
 import Header from './component/Shared/Header'
 import Menu from './component/Shared/Menu';
+import PrivateRoute from './component/PrivateRoute/PrivateRoute'
+import PrivateRouteAdmin from './component/PrivateRoute/PrivateRouteAdmin'
 
 import Product from './component/Product/Product'
 import CreateProduct from './component/Product/CreateProduct'
 import UpdateProduct from './component/Product/UpdateProduct'
+
+import Coupon from './component/Coupon/Coupon'
+import CreateCoupon from './component/Coupon/CreateCoupon'
+import UpdateCoupon from './component/Coupon/UpdateCoupon'
+
+import Sale from './component/Sale/Sale'
+import CreateSale from './component/Sale/CreateSale'
+import UpdateSale from './component/Sale/UpdateSale'
 
 import Producer from './component/Producer/Producer'
 import CreateProducer from './component/Producer/CreateProducer'
@@ -45,62 +55,62 @@ import Login from './component/Login/Login';
 import NotFound from './component/NotFound/NotFound';
 
 function App() {
+  const { jwt, user } = useContext(AuthContext);
   return (
-    <AuthContextProvider>
-      <Router>
+    <Router>
+      <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
 
-        <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        <Header />
+        <Menu />
 
-          <Header />
-          <Menu />
+        <Switch>
+          <Route exact path='/' component={Login} />
 
-          <Switch>
-            <Route exact path='/' component={Login} />
-
-            <Route exact path='/customer' component={UserCus} />
-            <Route path='/customer/create' component={CreateUserCus} />
-            <Route path='/customer/update/:id' component={UpdateUserCus} />
+          <PrivateRoute exact path='/customer' component={UserCus} />
+          <PrivateRoute path='/customer/create' component={CreateUserCus} />
+          <PrivateRoute path='/customer/update/:id' component={UpdateUserCus} />
 
 
-            <Route exact path='/product' component={Product} />
-            <Route path='/product/create' component={CreateProduct} />
-            <Route path='/product/update/:id' component={UpdateProduct} />
+          <PrivateRoute exact path='/product' component={Product} />
+          <PrivateRoute path='/product/create' component={CreateProduct} />
+          <PrivateRoute path='/product/update/:id' component={UpdateProduct} />
 
-            <Route exact path='/producer' component={Producer} />
-            <Route path='/producer/create' component={CreateProducer} />
-            <Route path='/producer/update/:id' component={UpdateProducer} />
-            <Route path='/producer/:id' component={DetailProducer} />
+          <PrivateRoute exact path='/coupon' component={Coupon} />
+          <PrivateRoute path='/coupon/create' component={CreateCoupon} />
+          <PrivateRoute path='/coupon/update/:id' component={UpdateCoupon} />
 
-            {/* 
-          <Route exact path='/producer' component={Producer} />
-          <Route path='/producer/create' component={CreateProducer} />
-          <Route path='/producer/update/:id' component={UpdateProducer} />
-          <Route path='/producer/:id' component={DetailProducer} /> */}
+          <PrivateRoute exact path='/producer' component={Producer} />
+          <PrivateRoute path='/producer/create' component={CreateProducer} />
+          <PrivateRoute path='/producer/update/:id' component={UpdateProducer} />
+          <PrivateRoute path='/producer/:id' component={DetailProducer} />
 
 
-            <Route exact path='/permission' component={Permission} />
-            <Route path='/permission/create' component={CreatePermission} />
-            <Route path='/permission/update/:id' component={UpdatePermission} />
+          <PrivateRoute exact path='/sale' component={Sale} />
+          <PrivateRoute path='/sale/create' component={CreateSale} />
+          <PrivateRoute path='/sale/update/:id' component={UpdateSale} />
 
-            <Route exact path='/user' component={User} />
-            <Route path='/user/create' component={CreateUser} />
-            <Route path='/user/update/:id' component={UpdateUser} />
+          <PrivateRoute exact path='/order' component={Order} />
+          <PrivateRoute path='/order/detail/:id' component={DetailOrder} />
+          <PrivateRoute path='/confirmorder' component={ConfirmOrder} />
+          <PrivateRoute path='/delivery' component={Delivery} />
+          <PrivateRoute path='/confirmdelivery' component={ConfirmDelivery} />
+          <PrivateRoute path='/completedorder' component={CompletedOrder} />
+          <PrivateRoute path='/cancelorder' component={CancelOrder} />
 
-            <Route exact path='/order' component={Order} />
-            <Route path='/order/detail/:id' component={DetailOrder} />
-            <Route path='/confirmorder' component={ConfirmOrder} />
-            <Route path='/delivery' component={Delivery} />
-            <Route path='/confirmdelivery' component={ConfirmDelivery} />
-            <Route path='/completedorder' component={CompletedOrder} />
-            <Route path='/cancelorder' component={CancelOrder} />
+          <PrivateRouteAdmin exact path='/permission' component={Permission} />
+          <PrivateRouteAdmin path='/permission/create' component={CreatePermission} />
+          <PrivateRouteAdmin path='/permission/update/:id' component={UpdatePermission} />
 
-            <Route component={NotFound} />
-          </Switch>;
+          <PrivateRouteAdmin exact path='/user' component={User} />
+          <PrivateRouteAdmin path='/user/create' component={CreateUser} />
+          <PrivateRouteAdmin path='/user/update/:id' component={UpdateUser} />
+
+          <Route component={NotFound} />
+        </Switch>;
 
       </div>
 
-      </Router>
-    </AuthContextProvider>
+    </Router>
 
 
 

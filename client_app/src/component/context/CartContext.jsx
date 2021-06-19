@@ -1,20 +1,41 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+import io from "socket.io-client";
+
+import orderAPI from '../API/order';
+
+const socket = io(process.env.REACT_APP_API, {
+    transports: ['websocket'], jsonp: false
+});
+socket.connect();
 
 export const CartContext = createContext();
 
 const CartContextProvider = (props) => {
+    const [redirect, setRedirect] = useState(false);
     const [sumCount, setSumCount] = useState(0);
     const [sumPrice, setSumPrice] = useState(0);
     const [cartItem, setCartItem] = useState([]);
     const [show_success, set_show_success] = useState(false)
+    const [flag, setFlag] = useState(false)
+    const [check, setCheck] = useState('')
 
-    useEffect(() => {
+    useEffect(async () => {
+
         if (JSON.parse(localStorage.getItem('carts'))) {
+            if (!flag) {
+                const response = await orderAPI.checkCart({ cartItem: JSON.parse(localStorage.getItem('carts')) })
+                if (response.msg !== 'Thanh Cong') {
+                    localStorage.setItem('carts', JSON.stringify(response.cart))
+                }
+                setFlag(true)
+            }
             setCartItem(JSON.parse(localStorage.getItem('carts')))
             Sum(JSON.parse(localStorage.getItem('carts')), 0, 0)
         }
     }, [sumCount])
+
+
 
     function Sum(cartItem, count, price) {
         cartItem.forEach(item => {
@@ -30,7 +51,7 @@ const CartContextProvider = (props) => {
             id_cart: Math.random().toString().replace(".", ""),
             id_product: item._id,
             name_product: item.name_product,
-            price_product: item.price_product,
+            price_product: item.id_sale && item.id_sale.status ? Number(item.price_product) * (100 - Number(item.id_sale.promotion)) / 100 : item.price_product,
             image: item.image,
             count: count,
         }
@@ -84,6 +105,27 @@ const CartContextProvider = (props) => {
         }
     }
 
+    const resetCart = async (cart) => {
+        let cartArr = cart.map(e => {
+            return Object.assign({}, {
+                id_cart: Math.random().toString().replace(".", ""),
+                id_product: e.id_product._id,
+                name_product: e.id_product.name_product,
+                price_product: e.id_product.price_product,
+                image: e.id_product.image,
+                count: e.count,
+            });
+        })
+        const response = await orderAPI.checkCart({ cartItem: cartArr })
+        if (response.msg !== "Thanh Cong") {
+            localStorage.setItem('carts', JSON.stringify(response.cart))
+            setSumCount(1)
+            return
+        }
+        localStorage.setItem('carts', JSON.stringify(cartArr))
+        setSumCount(1)
+    }
+
     const deleteCart = (data) => {
         let updateCart = cartItem.filter((item) => {
             return item !== data
@@ -116,11 +158,53 @@ const CartContextProvider = (props) => {
         localStorage.setItem('carts', JSON.stringify(cartItem))
     }
 
-    const checkOut = () => {
-        setSumCount(0)
-        localStorage.setItem('carts', JSON.stringify([]))
+    const checkOut = async (fullname, phone, id_user, address, total, status, pay, id_payment, feeship, code, discount) => {
+        const data = {
+            fullname: fullname,
+            phone: phone,
+            id_user: id_user,
+            address: address,
+            total: total,
+            status: status,
+            pay: pay,
+            id_payment: id_payment,
+            feeship: feeship,
+            cartItem: cartItem,
+            code: code,
+            discount: discount === 0 ? undefined : discount
+        }
+        const response = await orderAPI.post_order(data)
+        if (response.msg === "Thanh Cong") {
+            socket.emit('send_order', "Có người vừa đặt hàng")
+            setSumCount(0)
+            localStorage.setItem('carts', JSON.stringify([]))
+            setRedirect(true)
+        } else {
+            setCheck(response.msg)
+            localStorage.setItem('carts', JSON.stringify(response.cart))
+            setSumCount(0)
+            setTimeout(() => {
+                setCheck('')
+            }, 1500)
+        }
     }
 
+    const checkCart = async (cartItem) => {
+        const response = await orderAPI.checkCart({ cartItem: cartItem })
+        if (response.msg !== "Thanh Cong") {
+            setCheck(response.msg)
+            localStorage.setItem('carts', JSON.stringify(response.cart))
+            setSumCount(0)
+            setTimeout(() => {
+                setCheck('')
+            }, 1500)
+        } else {
+            setCheck(response.msg)
+            setTimeout(() => {
+                setCheck('')
+            }, 1500)
+        }
+    }
 
     return (
         <CartContext.Provider
@@ -128,18 +212,23 @@ const CartContextProvider = (props) => {
                 cartItem,
                 sumPrice,
                 sumCount,
+                setSumCount,
                 show_success,
                 addToCart,
                 deleteCart,
                 onChangeCount,
                 increaseCount,
                 decreaseCount,
-                checkOut
-
+                checkOut,
+                redirect,
+                setRedirect,
+                check,
+                setCheck,
+                checkCart,
+                resetCart
             }}>
             {props.children}
         </CartContext.Provider>
     );
 }
-
 export default CartContextProvider;

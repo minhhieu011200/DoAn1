@@ -3,6 +3,7 @@ import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
 } from "use-places-autocomplete";
+
 import {
     Combobox,
     ComboboxInput,
@@ -15,7 +16,7 @@ import "@reach/combobox/styles.css";
 
 const service = new window.google.maps.DistanceMatrixService();
 
-function Address({ setCoordinates, panTo, address, origin, coordinates }) {
+function Address({ setCoordinates, panTo, address, origin, coordinates, setAddress }) {
     const {
         ready,
         value,
@@ -36,32 +37,12 @@ function Address({ setCoordinates, panTo, address, origin, coordinates }) {
             CheckDistance(coordinates, address)
             setShow(false)
         }
-
     }, [address])
 
 
 
     const handleSelect = async (value) => {
-        try {
-            setValue(value, false);
-            const result = await getGeocode({ address: value })
-            const { lat, lng } = await getLatLng(result[0])
-            const destinate = {
-                lat: lat,
-                lng: lng
-            };
-            if (panTo) {
-                panTo({ lat, lng })
-            }
-
-            setCoordinates({ lat: lat, lng: lng })
-            CheckDistance(destinate, value)
-
-            clearSuggestions()
-        }
-        catch (error) {
-            console.log(error)
-        }
+        setValue(value)
     };
 
     const CheckDistance = (destinate, value) => {
@@ -97,6 +78,7 @@ function Address({ setCoordinates, panTo, address, origin, coordinates }) {
         setValue(e.target.value)
         setShow(true);
     }
+
     return (
         <div className="checkout-form-list">
             <label htmlFor="address">Address</label>
